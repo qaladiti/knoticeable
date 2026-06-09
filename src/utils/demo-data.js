@@ -338,12 +338,12 @@ export function getCart() {
   return cart;
 }
 
-export function addToCart(product) {
+export function addToCart(product, quantity = 1) {
   const existing = cart.find(item => item.id === product.id);
   if (existing) {
-    existing.quantity += 1;
+    existing.quantity += quantity;
   } else {
-    cart.push({ ...product, quantity: 1 });
+    cart.push({ ...product, quantity: quantity });
   }
   return cart;
 }
