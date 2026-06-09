@@ -6,6 +6,7 @@
 import { navigate, getParams } from '../../router.js';
 import { searchProducts, demoProducts, demoCategories } from '../../utils/demo-data.js';
 import { formatRupees } from '../../utils/format.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 let debounceTimer = null;
 
@@ -69,9 +70,11 @@ export function render() {
   }
 
   return `
+    ${renderNavbar('search')}
+
     <section class="page search-page">
       <!-- Header with back + search -->
-      <div style="
+      <div class="search-page-header" style="
         padding: var(--space-3) var(--space-4);
         display: flex;
         align-items: center;

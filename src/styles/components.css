@@ -975,3 +975,162 @@
 .toggle__input:checked ~ .toggle__thumb {
   transform: translateX(24px);
 }
+
+/* ============================================
+   RESPONSIVE OVERRIDES FOR WEBAPP
+   ============================================ */
+@media (min-width: 768px) {
+  /* Hide bottom mobile navigation */
+  .bottom-nav {
+    display: none !important;
+  }
+  
+  /* Update page paddings on desktop */
+  .page {
+    padding-top: calc(var(--header-height) + var(--space-6)) !important;
+    padding-bottom: var(--space-12) !important;
+  }
+  
+  /* Make grids responsive */
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--space-6) !important;
+  }
+  
+  .category-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: var(--space-5) !important;
+  }
+
+  /* Responsive Webapp Layout Splits */
+  .product-detail-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: var(--space-8) !important;
+    align-items: start !important;
+    margin-top: var(--space-4) !important;
+  }
+
+  .cart-layout-container {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr !important;
+    gap: var(--space-8) !important;
+    align-items: start !important;
+    margin-top: var(--space-4) !important;
+  }
+
+  .checkout-layout-container {
+    display: grid !important;
+    grid-template-columns: 3fr 2fr !important;
+    gap: var(--space-8) !important;
+    align-items: start !important;
+    margin-top: var(--space-4) !important;
+  }
+
+  .shop-layout-container {
+    display: grid !important;
+    grid-template-columns: 1fr 2.5fr !important;
+    gap: var(--space-8) !important;
+    align-items: start !important;
+    margin-top: var(--space-4) !important;
+  }
+
+  .dashboard-layout-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1.2fr !important;
+    gap: var(--space-8) !important;
+    align-items: start !important;
+    margin-top: var(--space-4) !important;
+  }
+
+  .earnings-layout-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1.2fr !important;
+    gap: var(--space-8) !important;
+    align-items: start !important;
+    margin-top: var(--space-4) !important;
+  }
+
+  .profile-page-content,
+  .add-product-form-container,
+  .products-list-container {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    background: var(--color-surface) !important;
+    padding: var(--space-6) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-card) !important;
+  }
+
+  /* Hide mobile-only elements on desktop */
+  .mobile-only,
+  .mobile-header,
+  .page > header,
+  .search-page > header,
+  #product-back-btn,
+  #cart-back-btn,
+  #checkout-back-btn,
+  #shop-back-btn,
+  #back-btn,
+  #preview-back-btn {
+    display: none !important;
+  }
+}
+
+/* Desktop Header Webapp Navigation styling */
+.desktop-header {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .desktop-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--felted-cream) !important;
+    border-bottom: 1px solid var(--cozy-taupe) !important;
+    padding: var(--space-4) var(--space-8) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .desktop-header__logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--wool-charcoal);
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  
+  .desktop-header__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  
+  .desktop-header__link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--wool-charcoal);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  .desktop-header__link:hover,
+  .desktop-header__link--active {
+    color: var(--artisan-olive) !important;
+  }
+  
+  .desktop-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+}

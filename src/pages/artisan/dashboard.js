@@ -7,6 +7,7 @@ import { navigate } from '../../router.js';
 import { demoOrders, getCurrentArtisan } from '../../utils/demo-data.js';
 import { formatRupees, timeAgo } from '../../utils/format.js';
 import { showToast } from '../../components/toast.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 export function render() {
   const artisan = getCurrentArtisan() || {
@@ -20,8 +21,10 @@ export function render() {
   const orderCount = orders.length;
 
   return `
+    ${renderNavbar('dashboard')}
+
     <!-- Fixed Header -->
-    <header class="header">
+    <header class="header mobile-header">
       <div class="header__title">
         <span>🧶</span>
         <span>${artisan.shopName}</span>
@@ -32,69 +35,74 @@ export function render() {
     </header>
 
     <section class="page">
-      
-      <!-- Earnings stat card -->
-      <div class="stat-card" style="margin-bottom:var(--space-6);">
-        <div class="stat-card__value">${formatRupees(totalEarnings / 100)}</div>
-        <div class="stat-card__label">Total Earnings</div>
-        <div class="stat-card__label" style="margin-top:var(--space-2);opacity:0.8;">
-          ${orderCount} orders this month
-        </div>
-      </div>
+      <div class="dashboard-layout-container">
+        <div class="dashboard-left-column">
+          <!-- Earnings stat card -->
+          <div class="stat-card" style="margin-bottom:var(--space-6);">
+            <div class="stat-card__value">${formatRupees(totalEarnings / 100)}</div>
+            <div class="stat-card__label">Total Earnings</div>
+            <div class="stat-card__label" style="margin-top:var(--space-2);opacity:0.8;">
+              ${orderCount} orders this month
+            </div>
+          </div>
 
-      <!-- Recent Orders -->
-      <div style="margin-bottom:var(--space-6);">
-        <h2 class="section-title">
-          <span>Recent Orders</span>
-          <span class="section-title__link" style="cursor:pointer;">${orderCount} total</span>
-        </h2>
-        
-        <div class="surface rounded-md shadow-card" style="overflow:hidden;">
-          ${orders.length > 0 ? orders.map(order => `
-            <div class="list-item" style="cursor:default;">
-              <div class="list-item__content">
-                <div class="list-item__title">${order.productTitle}</div>
-                <div class="list-item__subtitle">${timeAgo(order.createdAt)}</div>
+          <!-- Quick Actions -->
+          <div style="margin-bottom:var(--space-6);">
+            <h2 class="section-title">Quick Actions</h2>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
+              <div class="card card--interactive quick-action-card" id="action-add-product" role="button" tabindex="0" aria-label="Add Product"
+                style="padding:var(--space-6);text-align:center;">
+                <div style="font-size:2.5rem;margin-bottom:var(--space-3);line-height:1;">📸</div>
+                <div style="font-weight:var(--font-semibold);color:var(--color-on-surface);font-size:var(--text-base);">Add Product</div>
               </div>
-              <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:var(--space-1);">
-                <span class="badge badge--${getStatusBadge(order.status)}">${capitalize(order.status)}</span>
-                <span style="font-weight:var(--font-bold);color:var(--color-primary);font-size:var(--text-sm);">
-                  ${formatRupees(order.artisanEarning / 100)}
-                </span>
+              
+              <div class="card card--interactive quick-action-card" id="action-my-products" role="button" tabindex="0" aria-label="My Products"
+                style="padding:var(--space-6);text-align:center;">
+                <div style="font-size:2.5rem;margin-bottom:var(--space-3);line-height:1;">📋</div>
+                <div style="font-weight:var(--font-semibold);color:var(--color-on-surface);font-size:var(--text-base);">My Products</div>
               </div>
             </div>
-          `).join('') : `
-            <div class="empty-state" style="padding:var(--space-8);">
-              <div class="empty-state__icon">📦</div>
-              <p class="empty-state__text">No orders yet</p>
+          </div>
+
+          <!-- Share Your Shop -->
+          <button id="share-shop-btn" class="btn btn-secondary" style="margin-bottom:var(--space-8);">
+            📤 Share Your Shop
+          </button>
+        </div>
+
+        <div class="dashboard-right-column">
+          <!-- Recent Orders -->
+          <div style="margin-bottom:var(--space-6);">
+            <h2 class="section-title">
+              <span>Recent Orders</span>
+              <span class="section-title__link" style="cursor:pointer;">${orderCount} total</span>
+            </h2>
+            
+            <div class="surface rounded-md shadow-card" style="overflow:hidden;">
+              ${orders.length > 0 ? orders.map(order => `
+                <div class="list-item" style="cursor:default;">
+                  <div class="list-item__content">
+                    <div class="list-item__title">${order.productTitle}</div>
+                    <div class="list-item__subtitle">${timeAgo(order.createdAt)}</div>
+                  </div>
+                  <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:var(--space-1);">
+                    <span class="badge badge--${getStatusBadge(order.status)}">${capitalize(order.status)}</span>
+                    <span style="font-weight:var(--font-bold);color:var(--color-primary);font-size:var(--text-sm);">
+                      ${formatRupees(order.artisanEarning / 100)}
+                    </span>
+                  </div>
+                </div>
+              `).join('') : `
+                <div class="empty-state" style="padding:var(--space-8);">
+                  <div class="empty-state__icon">📦</div>
+                  <p class="empty-state__text">No orders yet</p>
+                </div>
+              `}
             </div>
-          `}
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div style="margin-bottom:var(--space-6);">
-        <h2 class="section-title">Quick Actions</h2>
-        
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
-          <div class="card card--interactive quick-action-card" id="action-add-product" role="button" tabindex="0" aria-label="Add Product"
-            style="padding:var(--space-6);text-align:center;">
-            <div style="font-size:2.5rem;margin-bottom:var(--space-3);line-height:1;">📸</div>
-            <div style="font-weight:var(--font-semibold);color:var(--color-on-surface);font-size:var(--text-base);">Add Product</div>
-          </div>
-          
-          <div class="card card--interactive quick-action-card" id="action-my-products" role="button" tabindex="0" aria-label="My Products"
-            style="padding:var(--space-6);text-align:center;">
-            <div style="font-size:2.5rem;margin-bottom:var(--space-3);line-height:1;">📋</div>
-            <div style="font-weight:var(--font-semibold);color:var(--color-on-surface);font-size:var(--text-base);">My Products</div>
           </div>
         </div>
       </div>
-
-      <!-- Share Your Shop -->
-      <button id="share-shop-btn" class="btn btn-secondary" style="margin-bottom:var(--space-8);">
-        📤 Share Your Shop
-      </button>
 
       <!-- Spacer for bottom nav -->
       <div style="height:var(--space-8);"></div>

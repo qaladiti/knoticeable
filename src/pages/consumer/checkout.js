@@ -7,6 +7,7 @@ import { navigate } from '../../router.js';
 import { getCart, getCartTotal, clearCart } from '../../utils/demo-data.js';
 import { formatRupees, uid } from '../../utils/format.js';
 import { showToast } from '../../components/toast.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 const PLATFORM_FEE_PERCENT = 0.05;
 
@@ -72,9 +73,11 @@ export function render() {
   }
 
   return `
+    ${renderNavbar('cart')}
+
     <section class="page checkout-page">
       <!-- Header -->
-      <header style="
+      <header class="mobile-header" style="
         padding: var(--space-3) var(--space-4);
         display: flex;
         align-items: center;
@@ -91,123 +94,129 @@ export function render() {
       </header>
 
       <div style="padding: var(--space-4); padding-bottom: var(--space-16);">
-        <!-- Delivery Address Form -->
-        <div style="
-          background: var(--color-surface);
-          border-radius: var(--radius-md);
-          box-shadow: var(--shadow-card);
-          padding: var(--space-5);
-          margin-bottom: var(--space-5);
-        ">
-          <h2 style="
-            font-size: var(--text-base);
-            font-weight: var(--font-semibold);
-            margin-bottom: var(--space-4);
-            color: var(--color-on-surface);
-          ">📍 Delivery Address</h2>
-
-          <form id="checkout-form" novalidate>
-            <div class="input-group">
-              <label class="input-label" for="checkout-name">Full Name *</label>
-              <input
-                type="text"
-                id="checkout-name"
-                class="input"
-                placeholder="Enter your full name"
-                required
-                autocomplete="name"
-              />
-              <div class="input-error" id="name-error" style="display: none;"></div>
-            </div>
-
-            <div class="input-group">
-              <label class="input-label" for="checkout-phone">Phone Number *</label>
-              <input
-                type="tel"
-                id="checkout-phone"
-                class="input"
-                placeholder="10-digit mobile number"
-                required
-                autocomplete="tel"
-                maxlength="10"
-                inputmode="numeric"
-              />
-              <div class="input-error" id="phone-error" style="display: none;"></div>
-            </div>
-
-            <div class="input-group">
-              <label class="input-label" for="checkout-address">Delivery Address *</label>
-              <textarea
-                id="checkout-address"
-                class="input"
-                placeholder="House/Flat no., Street, Landmark, City, State"
-                required
-                rows="3"
-                style="min-height: var(--input-height); resize: vertical;"
-              ></textarea>
-              <div class="input-error" id="address-error" style="display: none;"></div>
-            </div>
-
-            <div class="input-group" style="margin-bottom: 0;">
-              <label class="input-label" for="checkout-pincode">Pincode *</label>
-              <input
-                type="text"
-                id="checkout-pincode"
-                class="input"
-                placeholder="6-digit pincode"
-                required
-                maxlength="6"
-                inputmode="numeric"
-              />
-              <div class="input-error" id="pincode-error" style="display: none;"></div>
-            </div>
-          </form>
-        </div>
-
-        <!-- Order Summary -->
-        <div style="
-          background: var(--color-surface);
-          border-radius: var(--radius-md);
-          box-shadow: var(--shadow-card);
-          padding: var(--space-5);
-          margin-bottom: var(--space-5);
-        ">
-          <h2 style="
-            font-size: var(--text-base);
-            font-weight: var(--font-semibold);
-            margin-bottom: var(--space-3);
-            color: var(--color-on-surface);
-          ">🛍️ Order Summary</h2>
-
-          ${cart.map(item => renderOrderItem(item)).join('')}
-
-          <div style="margin-top: var(--space-4);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2); font-size: var(--text-sm); color: var(--color-on-surface-medium);">
-              <span>Subtotal</span>
-              <span>${formatRupees(subtotal / 100)}</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-3); font-size: var(--text-sm); color: var(--color-on-surface-medium);">
-              <span>Platform Fee (5%)</span>
-              <span>${formatRupees(platformFee / 100)}</span>
-            </div>
+        <div class="checkout-layout-container">
+          <div class="checkout-form-column">
+            <!-- Delivery Address Form -->
             <div style="
-              border-top: 1px solid var(--color-border);
-              padding-top: var(--space-3);
-              display: flex;
-              justify-content: space-between;
-              font-size: var(--text-lg);
-              font-weight: var(--font-bold);
+              background: var(--color-surface);
+              border-radius: var(--radius-md);
+              box-shadow: var(--shadow-card);
+              padding: var(--space-5);
+              margin-bottom: var(--space-5);
             ">
-              <span>Total</span>
-              <span style="color: var(--color-primary);">${formatRupees(total / 100)}</span>
+              <h2 style="
+                font-size: var(--text-base);
+                font-weight: var(--font-semibold);
+                margin-bottom: var(--space-4);
+                color: var(--color-on-surface);
+              ">📍 Delivery Address</h2>
+
+              <form id="checkout-form" novalidate>
+                <div class="input-group">
+                  <label class="input-label" for="checkout-name">Full Name *</label>
+                  <input
+                    type="text"
+                    id="checkout-name"
+                    class="input"
+                    placeholder="Enter your full name"
+                    required
+                    autocomplete="name"
+                  />
+                  <div class="input-error" id="name-error" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="checkout-phone">Phone Number *</label>
+                  <input
+                    type="tel"
+                    id="checkout-phone"
+                    class="input"
+                    placeholder="10-digit mobile number"
+                    required
+                    autocomplete="tel"
+                    maxlength="10"
+                    inputmode="numeric"
+                  />
+                  <div class="input-error" id="phone-error" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="checkout-address">Delivery Address *</label>
+                  <textarea
+                    id="checkout-address"
+                    class="input"
+                    placeholder="House/Flat no., Street, Landmark, City, State"
+                    required
+                    rows="3"
+                    style="min-height: var(--input-height); resize: vertical;"
+                  ></textarea>
+                  <div class="input-error" id="address-error" style="display: none;"></div>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 0;">
+                  <label class="input-label" for="checkout-pincode">Pincode *</label>
+                  <input
+                    type="text"
+                    id="checkout-pincode"
+                    class="input"
+                    placeholder="6-digit pincode"
+                    required
+                    maxlength="6"
+                    inputmode="numeric"
+                  />
+                  <div class="input-error" id="pincode-error" style="display: none;"></div>
+                </div>
+              </form>
             </div>
           </div>
-        </div>
 
-        <!-- Pay Button -->
-        <button class="btn btn-primary" id="pay-btn">
-          💳 Pay ${formatRupees(total / 100)}
-        </button>
+          <div class="checkout-summary-column">
+            <!-- Order Summary -->
+            <div style="
+              background: var(--color-surface);
+              border-radius: var(--radius-md);
+              box-shadow: var(--shadow-card);
+              padding: var(--space-5);
+              margin-bottom: var(--space-5);
+            ">
+              <h2 style="
+                font-size: var(--text-base);
+                font-weight: var(--font-semibold);
+                margin-bottom: var(--space-3);
+                color: var(--color-on-surface);
+              ">🛍️ Order Summary</h2>
+
+              ${cart.map(item => renderOrderItem(item)).join('')}
+
+              <div style="margin-top: var(--space-4);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2); font-size: var(--text-sm); color: var(--color-on-surface-medium);">
+                  <span>Subtotal</span>
+                  <span>${formatRupees(subtotal / 100)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-3); font-size: var(--text-sm); color: var(--color-on-surface-medium);">
+                  <span>Platform Fee (5%)</span>
+                  <span>${formatRupees(platformFee / 100)}</span>
+                </div>
+                <div style="
+                  border-top: 1px solid var(--color-border);
+                  padding-top: var(--space-3);
+                  display: flex;
+                  justify-content: space-between;
+                  font-size: var(--text-lg);
+                  font-weight: var(--font-bold);
+                ">
+                  <span>Total</span>
+                  <span style="color: var(--color-primary);">${formatRupees(total / 100)}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pay Button -->
+            <button class="btn btn-primary" id="pay-btn">
+              💳 Pay ${formatRupees(total / 100)}
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Success Modal (hidden) -->

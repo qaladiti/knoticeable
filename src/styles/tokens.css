@@ -37,6 +37,13 @@
   --color-focus-ring: #606C38;
   --color-overlay: rgba(43, 45, 70, 0.5);
 
+  /* === COLOR ALIASES FOR COZY THEME === */
+  --felted-cream: var(--color-surface-dim);
+  --cozy-taupe: var(--color-secondary);
+  --soft-oatmeal: var(--color-primary-light);
+  --artisan-olive: var(--color-primary);
+  --wool-charcoal: var(--color-on-surface);
+
   /* === TYPOGRAPHY === */
   --font-family: 'Comfortaa', 'Inter', system-ui, -apple-system, sans-serif;
   --font-title-family: 'Playfair Display', serif;
@@ -111,7 +118,7 @@
   --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* === LAYOUT === */
-  --content-max: 480px;
+  --content-max: 1200px;
   --content-pad: var(--space-4);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);

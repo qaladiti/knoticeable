@@ -6,6 +6,7 @@
 import { navigate } from '../../router.js';
 import { demoOrders, getCurrentArtisan } from '../../utils/demo-data.js';
 import { formatRupees, timeAgo } from '../../utils/format.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 export function render() {
   const artisan = getCurrentArtisan() || {
@@ -21,8 +22,10 @@ export function render() {
   const pendingTotal = totalEarnings - paidTotal;
 
   return `
+    ${renderNavbar('dashboard')}
+
     <!-- Fixed Header -->
-    <header class="header">
+    <header class="header mobile-header">
       <a class="header__action" id="back-btn" href="#/artisan/dashboard" aria-label="Go back" role="button">
         ←
       </a>
@@ -33,86 +36,91 @@ export function render() {
     </header>
 
     <section class="page">
+      <div class="earnings-layout-container">
+        <div class="earnings-left-column">
+          <!-- Earnings stat card -->
+          <div class="stat-card" style="margin-bottom:var(--space-4);">
+            <div class="stat-card__value">${formatRupees(totalEarnings / 100)}</div>
+            <div class="stat-card__label">Earned this month</div>
+          </div>
 
-      <!-- Earnings stat card -->
-      <div class="stat-card" style="margin-bottom:var(--space-4);">
-        <div class="stat-card__value">${formatRupees(totalEarnings / 100)}</div>
-        <div class="stat-card__label">Earned this month</div>
-      </div>
+          <!-- UPI info -->
+          <div style="
+            text-align:center;
+            padding:var(--space-3) var(--space-4);
+            background:var(--color-success-light);
+            border-radius:var(--radius-md);
+            margin-bottom:var(--space-6);
+            font-size:var(--text-sm);
+            color:var(--color-success);
+            font-weight:var(--font-medium);
+          ">
+            Paid to your UPI · <strong>${artisan.upiId}</strong>
+          </div>
 
-      <!-- UPI info -->
-      <div style="
-        text-align:center;
-        padding:var(--space-3) var(--space-4);
-        background:var(--color-success-light);
-        border-radius:var(--radius-md);
-        margin-bottom:var(--space-6);
-        font-size:var(--text-sm);
-        color:var(--color-success);
-        font-weight:var(--font-medium);
-      ">
-        Paid to your UPI · <strong>${artisan.upiId}</strong>
-      </div>
-
-      <!-- Earning summary cards -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-bottom:var(--space-6);">
-        <div class="card" style="padding:var(--space-4);text-align:center;">
-          <div style="font-size:var(--text-xs);color:var(--color-on-surface-muted);margin-bottom:var(--space-1);">Paid Out</div>
-          <div style="font-size:var(--text-lg);font-weight:var(--font-bold);color:var(--color-success);">${formatRupees(paidTotal / 100)}</div>
-        </div>
-        <div class="card" style="padding:var(--space-4);text-align:center;">
-          <div style="font-size:var(--text-xs);color:var(--color-on-surface-muted);margin-bottom:var(--space-1);">Pending</div>
-          <div style="font-size:var(--text-lg);font-weight:var(--font-bold);color:var(--color-warning);">${formatRupees(pendingTotal / 100)}</div>
-        </div>
-      </div>
-
-      <!-- Recent Payouts -->
-      <div style="margin-bottom:var(--space-6);">
-        <h2 class="section-title">Recent Payouts</h2>
-        
-        <div class="surface rounded-md shadow-card" style="overflow:hidden;">
-          ${orders.length > 0 ? orders.map(order => `
-            <div class="list-item" style="cursor:default;">
-              <div class="list-item__content">
-                <div class="list-item__title">${order.productTitle}</div>
-                <div class="list-item__subtitle">${formatDate(order.createdAt)}</div>
-              </div>
-              <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:var(--space-1);">
-                <span style="font-weight:var(--font-bold);color:var(--color-on-surface);font-size:var(--text-sm);">
-                  ${formatRupees(order.artisanEarning / 100)}
-                </span>
-                <span class="badge badge--${getPayoutBadge(order.status)}">
-                  ${getPayoutLabel(order.status)}
-                </span>
-              </div>
+          <!-- Earning summary cards -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-bottom:var(--space-6);">
+            <div class="card" style="padding:var(--space-4);text-align:center;">
+              <div style="font-size:var(--text-xs);color:var(--color-on-surface-muted);margin-bottom:var(--space-1);">Paid Out</div>
+              <div style="font-size:var(--text-lg);font-weight:var(--font-bold);color:var(--color-success);">${formatRupees(paidTotal / 100)}</div>
             </div>
-          `).join('') : `
-            <div class="empty-state" style="padding:var(--space-8);">
-              <div class="empty-state__icon">💸</div>
-              <p class="empty-state__text">No payouts yet</p>
+            <div class="card" style="padding:var(--space-4);text-align:center;">
+              <div style="font-size:var(--text-xs);color:var(--color-on-surface-muted);margin-bottom:var(--space-1);">Pending</div>
+              <div style="font-size:var(--text-lg);font-weight:var(--font-bold);color:var(--color-warning);">${formatRupees(pendingTotal / 100)}</div>
             </div>
-          `}
-        </div>
-      </div>
+          </div>
 
-      <!-- Total Earnings Summary -->
-      <div style="
-        background:var(--color-surface-variant);
-        border-radius:var(--radius-md);
-        padding:var(--space-5);
-        margin-bottom:var(--space-8);
-      ">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-weight:var(--font-semibold);color:var(--color-on-surface);font-size:var(--text-base);">
-            Total Earnings
-          </span>
-          <span style="font-weight:var(--font-bold);color:var(--color-primary);font-size:var(--text-xl);">
-            ${formatRupees(totalEarnings / 100)}
-          </span>
+          <!-- Total Earnings Summary -->
+          <div style="
+            background:var(--color-surface-variant);
+            border-radius:var(--radius-md);
+            padding:var(--space-5);
+            margin-bottom:var(--space-8);
+          ">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-weight:var(--font-semibold);color:var(--color-on-surface);font-size:var(--text-base);">
+                Total Earnings
+              </span>
+              <span style="font-weight:var(--font-bold);color:var(--color-primary);font-size:var(--text-xl);">
+                ${formatRupees(totalEarnings / 100)}
+              </span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:var(--space-2);">
+              <span style="font-size:var(--text-xs);color:var(--color-on-surface-muted);">${orders.length} orders</span>
+              <span style="font-size:var(--text-xs);color:var(--color-on-surface-muted);">Platform fee deducted</span>
+            </div>
+          </div>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:var(--space-2);">
-          <span style="font-size:var(--text-xs);color:var(--color-on-surface-muted);">${orders.length} orders</span>
-          <span style="font-size:var(--text-xs);color:var(--color-on-surface-muted);">Platform fee deducted</span>
+
+        <div class="earnings-right-column">
+          <!-- Recent Payouts -->
+          <div style="margin-bottom:var(--space-6);">
+            <h2 class="section-title">Recent Payouts</h2>
+            
+            <div class="surface rounded-md shadow-card" style="overflow:hidden;">
+              ${orders.length > 0 ? orders.map(order => `
+                <div class="list-item" style="cursor:default;">
+                  <div class="list-item__content">
+                    <div class="list-item__title">${order.productTitle}</div>
+                    <div class="list-item__subtitle">${formatDate(order.createdAt)}</div>
+                  </div>
+                  <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:var(--space-1);">
+                    <span style="font-weight:var(--font-bold);color:var(--color-on-surface);font-size:var(--text-sm);">
+                      ${formatRupees(order.artisanEarning / 100)}
+                    </span>
+                    <span class="badge badge--${getPayoutBadge(order.status)}">
+                      ${getPayoutLabel(order.status)}
+                    </span>
+                  </div>
+                </div>
+              `).join('') : `
+                <div class="empty-state" style="padding:var(--space-8);">
+                  <div class="empty-state__icon">💸</div>
+                  <p class="empty-state__text">No payouts yet</p>
+                </div>
+              `}
+            </div>
+          </div>
         </div>
       </div>
 

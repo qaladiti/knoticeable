@@ -7,6 +7,7 @@ import { navigate } from '../../router.js';
 import { getCart, removeFromCart, updateCartQuantity, getCartTotal } from '../../utils/demo-data.js';
 import { formatRupees } from '../../utils/format.js';
 import { showToast } from '../../components/toast.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 const PLATFORM_FEE_PERCENT = 0.05; // 5% platform fee
 
@@ -166,8 +167,9 @@ export function render() {
 
   if (cart.length === 0) {
     return `
+      ${renderNavbar('cart')}
       <section class="page cart-page">
-        <header style="
+        <header class="mobile-header" style="
           padding: var(--space-3) var(--space-4);
           display: flex;
           align-items: center;
@@ -190,8 +192,9 @@ export function render() {
   }
 
   return `
+    ${renderNavbar('cart')}
     <section class="page cart-page">
-      <header style="
+      <header class="mobile-header" style="
         padding: var(--space-3) var(--space-4);
         display: flex;
         align-items: center;
@@ -213,14 +216,20 @@ export function render() {
       </header>
 
       <div style="padding: var(--space-4); padding-bottom: var(--space-16);">
-        <!-- Cart Items -->
-        <div id="cart-items-list">
-          ${cart.map(item => renderCartItem(item)).join('')}
-        </div>
+        <div class="cart-layout-container">
+          <div class="cart-items-column">
+            <!-- Cart Items -->
+            <div id="cart-items-list">
+              ${cart.map(item => renderCartItem(item)).join('')}
+            </div>
+          </div>
 
-        <!-- Summary -->
-        <div id="cart-summary">
-          ${renderCartSummary(cart)}
+          <div class="cart-summary-column">
+            <!-- Summary -->
+            <div id="cart-summary">
+              ${renderCartSummary(cart)}
+            </div>
+          </div>
         </div>
       </div>
     </section>`;

@@ -5,15 +5,18 @@
 
 import { navigate } from '../../router.js';
 import { getCurrentArtisan } from '../../utils/demo-data.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 export function render() {
   const artisan = getCurrentArtisan();
   const isArtisan = !!artisan;
 
   return `
+    ${renderNavbar('profile')}
+
     <section class="page profile-page">
       <!-- Header -->
-      <header style="
+      <header class="mobile-header" style="
         padding: var(--space-3) var(--space-4);
         border-bottom: 1px solid var(--color-border);
         min-height: var(--header-height);
@@ -25,7 +28,7 @@ export function render() {
         <h1 style="font-size: var(--text-lg); font-weight: var(--font-bold); color: var(--color-on-surface);">👤 My Profile</h1>
       </header>
 
-      <div style="padding: var(--space-6) var(--space-4); padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-4)); display: flex; flex-direction: column; gap: var(--space-6);">
+      <div class="profile-page-content" style="padding: var(--space-6) var(--space-4); padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-4)); display: flex; flex-direction: column; gap: var(--space-6);">
         
         <!-- User Info Card -->
         <div style="

@@ -6,6 +6,7 @@
 import { navigate } from '../../router.js';
 import { demoProducts, demoCategories, getCartCount, getProductsByArtisan } from '../../utils/demo-data.js';
 import { formatRupees } from '../../utils/format.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 function getArtisanCluster(artisanId) {
   const clusters = {
@@ -49,15 +50,12 @@ export function render() {
   const bestsellers = [...demoProducts].slice(0, 4);
 
   return `
-    <!-- Top Announcement Banner -->
-    <div class="featured-banner">
-      ✨ FEATURED CATEGORY: <span class="wool-font" style="font-style: italic;">Crochet Bags</span> - 15% Off with code WOOL15 👜
-    </div>
+    ${renderNavbar('home')}
 
     <section class="page home-page" style="padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-4));">
       
       <!-- Sticky Header -->
-      <header class="home-header" style="
+      <header class="home-header mobile-only" style="
         position: sticky;
         top: 0;
         z-index: 50;

@@ -7,6 +7,7 @@ import { navigate, getParams } from '../../router.js';
 import { getArtisanById, getProductsByArtisan, getCurrentArtisan, updateArtisan } from '../../utils/demo-data.js';
 import { formatRupees } from '../../utils/format.js';
 import { showToast } from '../../components/toast.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 function getArtisanContext() {
   const params = getParams();
@@ -34,9 +35,11 @@ export function render() {
   const products = getProductsByArtisan(artisan.uid);
 
   return `
+    ${renderNavbar('')}
+
     <section class="page shop-page" style="padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-4));">
       <!-- Header -->
-      <header style="
+      <header class="mobile-header" style="
         padding: var(--space-3) var(--space-4);
         border-bottom: 1px solid var(--color-border);
         min-height: var(--header-height);
@@ -55,69 +58,73 @@ export function render() {
         ${isOwner ? '<span style="font-size: var(--text-xs); background: var(--color-primary-light); color: var(--color-primary); padding: 4px var(--space-2); border-radius: var(--radius-sm); font-weight: var(--font-bold);">Your Shop</span>' : ''}
       </header>
 
-      <!-- Instagram Profile Section -->
-      <div style="padding: var(--space-4); background: var(--color-surface); border-bottom: 1px solid var(--color-border);">
-        <div style="display: flex; align-items: center; gap: var(--space-5); margin-bottom: var(--space-4);">
-          <!-- Shop Icon / Avatar -->
-          <div style="
-            width: 77px;
-            height: 77px;
-            border-radius: var(--radius-full);
-            background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            color: white;
-            border: 2px solid var(--color-surface);
-            box-shadow: 0 0 0 2px var(--color-primary);
-            flex-shrink: 0;
-          ">
-            🏪
-          </div>
+      <div class="shop-layout-container">
+        <div class="shop-profile-column">
+          <!-- Instagram Profile Section -->
+          <div style="padding: var(--space-4); background: var(--color-surface); border-bottom: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card);">
+            <div style="display: flex; align-items: center; gap: var(--space-5); margin-bottom: var(--space-4);">
+              <!-- Shop Icon / Avatar -->
+              <div style="
+                width: 77px;
+                height: 77px;
+                border-radius: var(--radius-full);
+                background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.2rem;
+                color: white;
+                border: 2px solid var(--color-surface);
+                box-shadow: 0 0 0 2px var(--color-primary);
+                flex-shrink: 0;
+              ">
+                🏪
+              </div>
 
-          <!-- Stats Grid -->
-          <div style="display: flex; flex: 1; justify-content: space-around; text-align: center;">
-            <div>
-              <div style="font-size: var(--text-lg); font-weight: var(--font-bold); color: var(--color-on-surface);">${products.length}</div>
-              <div style="font-size: var(--text-xs); color: var(--color-on-surface-muted);">Products</div>
+              <!-- Stats Grid -->
+              <div style="display: flex; flex: 1; justify-content: space-around; text-align: center;">
+                <div>
+                  <div style="font-size: var(--text-lg); font-weight: var(--font-bold); color: var(--color-on-surface);">${products.length}</div>
+                  <div style="font-size: var(--text-xs); color: var(--color-on-surface-muted);">Products</div>
+                </div>
+                <div>
+                  <div style="font-size: var(--text-lg); font-weight: var(--font-bold); color: var(--color-on-surface);">Live</div>
+                  <div style="font-size: var(--text-xs); color: var(--color-on-surface-muted);">Status</div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div style="font-size: var(--text-lg); font-weight: var(--font-bold); color: var(--color-on-surface);">Live</div>
-              <div style="font-size: var(--text-xs); color: var(--color-on-surface-muted);">Status</div>
+
+            <!-- Shop Name & Bio -->
+            <div style="margin-bottom: var(--space-4);">
+              <div style="font-size: var(--text-base); font-weight: var(--font-bold); color: var(--color-on-surface);">${artisan.shopName}</div>
+              <div id="shop-bio-text" style="font-size: var(--text-sm); color: var(--color-on-surface-medium); line-height: 1.4; white-space: pre-wrap; margin-top: var(--space-1);">${artisan.bio || 'Handmade crochet crafts 🧶'}</div>
+              <div style="font-size: var(--text-xs); color: var(--color-primary); font-weight: var(--font-medium); margin-top: var(--space-2); display: flex; align-items: center; gap: 4px;">
+                <span>💰 UPI Payout:</span>
+                <span style="font-family: monospace;">${artisan.upiId}</span>
+              </div>
+            </div>
+
+            <!-- Instagram Profile Action Buttons -->
+            <div style="display: flex; gap: var(--space-2);">
+              ${isOwner ? `
+                <button class="btn btn-secondary" id="edit-bio-btn" style="flex: 1; min-height: 40px; font-size: var(--text-sm); border-radius: var(--radius-sm); font-weight: var(--font-semibold);">
+                  ✏️ Edit Shop Bio
+                </button>
+                <button class="btn btn-primary" id="shop-add-btn" style="flex: 1; min-height: 40px; font-size: var(--text-sm); border-radius: var(--radius-sm); font-weight: var(--font-semibold);">
+                  📸 Add Product
+                </button>
+              ` : `
+                <button class="btn btn-primary" id="share-shop-whatsapp" style="width: 100%; min-height: 48px; font-size: var(--text-sm); border-radius: var(--radius-sm); font-weight: var(--font-semibold); background: var(--color-accent); border-color: var(--color-accent);">
+                  💬 Share Shop on WhatsApp
+                </button>
+              `}
             </div>
           </div>
         </div>
 
-        <!-- Shop Name & Bio -->
-        <div style="margin-bottom: var(--space-4);">
-          <div style="font-size: var(--text-base); font-weight: var(--font-bold); color: var(--color-on-surface);">${artisan.shopName}</div>
-          <div id="shop-bio-text" style="font-size: var(--text-sm); color: var(--color-on-surface-medium); line-height: 1.4; white-space: pre-wrap; margin-top: var(--space-1);">${artisan.bio || 'Handmade crochet crafts 🧶'}</div>
-          <div style="font-size: var(--text-xs); color: var(--color-primary); font-weight: var(--font-medium); margin-top: var(--space-2); display: flex; align-items: center; gap: 4px;">
-            <span>💰 UPI Payout:</span>
-            <span style="font-family: monospace;">${artisan.upiId}</span>
-          </div>
-        </div>
-
-        <!-- Instagram Profile Action Buttons -->
-        <div style="display: flex; gap: var(--space-2);">
-          ${isOwner ? `
-            <button class="btn btn-secondary" id="edit-bio-btn" style="flex: 1; min-height: 40px; font-size: var(--text-sm); border-radius: var(--radius-sm); font-weight: var(--font-semibold);">
-              ✏️ Edit Shop Bio
-            </button>
-            <button class="btn btn-primary" id="shop-add-btn" style="flex: 1; min-height: 40px; font-size: var(--text-sm); border-radius: var(--radius-sm); font-weight: var(--font-semibold);">
-              📸 Add Product
-            </button>
-          ` : `
-            <button class="btn btn-primary" id="share-shop-whatsapp" style="width: 100%; min-height: 48px; font-size: var(--text-sm); border-radius: var(--radius-sm); font-weight: var(--font-semibold); background: var(--color-accent); border-color: var(--color-accent);">
-              💬 Share Shop on WhatsApp
-            </button>
-          `}
-        </div>
-      </div>
-
-      <!-- Instagram Grid Layout -->
-      <div style="background: var(--color-surface);">
+        <div class="shop-products-column">
+          <!-- Instagram Grid Layout -->
+          <div style="background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden;">
         <!-- Tab Indicators -->
         <div style="
           display: flex;
@@ -184,6 +191,7 @@ export function render() {
             <p class="empty-state__text" style="font-size: var(--text-sm); color: var(--color-on-surface-muted);">All the products listed by this shop will appear here.</p>
           </div>
         `}
+        </div>
       </div>
 
       <!-- Edit Bio Modal (Hidden by default) -->

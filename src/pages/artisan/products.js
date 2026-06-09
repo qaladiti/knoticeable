@@ -7,6 +7,7 @@ import { navigate } from '../../router.js';
 import { demoProducts } from '../../utils/demo-data.js';
 import { formatRupees } from '../../utils/format.js';
 import { showToast } from '../../components/toast.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 // Track availability toggles locally (in a real app, this persists)
 let availabilityState = {};
@@ -22,8 +23,10 @@ export function render() {
   });
 
   return `
+    ${renderNavbar('dashboard')}
+
     <!-- Fixed Header -->
-    <header class="header">
+    <header class="header mobile-header">
       <a class="header__action" id="back-btn" href="#/artisan/dashboard" aria-label="Go back" role="button">
         ←
       </a>
@@ -34,6 +37,7 @@ export function render() {
     </header>
 
     <section class="page page--no-nav">
+      <div class="products-list-container">
       
       ${products.length > 0 ? `
         <!-- Product count -->
@@ -92,6 +96,7 @@ export function render() {
         </div>
       `}
 
+      </div>
     </section>
   `;
 }

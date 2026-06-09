@@ -4,20 +4,22 @@
 
 /* App shell */
 #app {
-  max-width: var(--content-max);
-  margin: 0 auto;
+  width: 100%;
   min-height: 100dvh;
-  background: var(--color-surface);
+  background: var(--color-surface-dim);
   position: relative;
   overflow-x: hidden;
 }
 
-/* Page container with bottom nav padding */
+/* Page container with responsive layout padding */
 .page {
   padding: var(--content-pad);
   padding-top: calc(var(--header-height) + var(--safe-top) + var(--space-4));
   padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-8));
   min-height: 100dvh;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  box-sizing: border-box;
   animation: pageEnter var(--transition-normal) ease-out;
 }
 
@@ -44,10 +46,8 @@
 .header {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 100%;
-  max-width: var(--content-max);
   height: calc(var(--header-height) + var(--safe-top));
   padding-top: var(--safe-top);
   background: var(--color-primary);
@@ -57,6 +57,7 @@
   padding-inline: var(--content-pad);
   z-index: 100;
   box-shadow: var(--shadow-md);
+  box-sizing: border-box;
 }
 
 .header__title {

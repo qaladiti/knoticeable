@@ -6,6 +6,7 @@
 import { navigate } from '../../router.js';
 import { showToast } from '../../components/toast.js';
 import { demoCategories, addProduct, getCurrentArtisan } from '../../utils/demo-data.js';
+import { renderNavbar } from '../../components/navbar.js';
 
 let selectedCategory = '';
 let imagePreviewUrl = '';
@@ -34,8 +35,10 @@ export function render() {
 
 function renderForm() {
   return `
+    ${renderNavbar('dashboard')}
+
     <!-- Fixed Header -->
-    <header class="header">
+    <header class="header mobile-header">
       <a class="header__action" id="back-btn" href="#/artisan/dashboard" aria-label="Go back" role="button">
         ←
       </a>
@@ -43,95 +46,96 @@ function renderForm() {
     </header>
 
     <section class="page page--no-nav">
-      
-      <!-- Upload Zone -->
-      <div class="upload-zone ${imagePreviewUrl ? 'upload-zone--filled' : ''}" id="upload-zone" role="button" tabindex="0" aria-label="Tap to add photo">
-        ${imagePreviewUrl ? `
-          <img class="upload-zone__preview" src="${imagePreviewUrl}" alt="Product preview" />
-          <button class="upload-zone__remove" id="remove-image-btn" aria-label="Remove image" type="button">✕</button>
-        ` : `
-          <span class="upload-zone__icon">📷</span>
-          <span class="upload-zone__text">Tap to add photo</span>
-        `}
-      </div>
-      <input 
-        type="file" 
-        id="file-input" 
-        accept="image/*" 
-        capture="environment" 
-        style="display:none;" 
-        aria-hidden="true"
-      />
-
-      <!-- Product Name -->
-      <div class="input-group">
+      <div class="add-product-form-container">
+        <!-- Upload Zone -->
+        <div class="upload-zone ${imagePreviewUrl ? 'upload-zone--filled' : ''}" id="upload-zone" role="button" tabindex="0" aria-label="Tap to add photo">
+          ${imagePreviewUrl ? `
+            <img class="upload-zone__preview" src="${imagePreviewUrl}" alt="Product preview" />
+            <button class="upload-zone__remove" id="remove-image-btn" aria-label="Remove image" type="button">✕</button>
+          ` : `
+            <span class="upload-zone__icon">📷</span>
+            <span class="upload-zone__text">Tap to add photo</span>
+          `}
+        </div>
         <input 
-          type="text"
-          id="product-name"
-          class="input"
-          placeholder="What did you make?"
-          maxlength="100"
-          value="${tempProduct.name}"
-          aria-label="Product name"
-          style="min-height:52px;box-sizing:border-box;"
+          type="file" 
+          id="file-input" 
+          accept="image/*" 
+          capture="environment" 
+          style="display:none;" 
+          aria-hidden="true"
         />
-      </div>
 
-      <!-- Price -->
-      <div class="input-group">
-        <div class="input-with-prefix" style="min-height:52px;">
-          <span class="input-prefix" style="min-height:52px;">₹</span>
+        <!-- Product Name -->
+        <div class="input-group">
           <input 
-            type="tel"
-            inputmode="numeric"
-            id="product-price"
+            type="text"
+            id="product-name"
             class="input"
-            placeholder="Price"
-            maxlength="6"
-            value="${tempProduct.price}"
-            aria-label="Product price in rupees"
-            style="min-height:52px;border:none;box-sizing:border-box;"
+            placeholder="What did you make?"
+            maxlength="100"
+            value="${tempProduct.name}"
+            aria-label="Product name"
+            style="min-height:52px;box-sizing:border-box;"
           />
         </div>
-      </div>
 
-      <!-- Description -->
-      <div class="input-group">
-        <textarea 
-          id="product-description"
-          class="input"
-          placeholder="Describe your creation... (e.g. size, material, care instructions)"
-          maxlength="500"
-          rows="3"
-          aria-label="Product description"
-          style="min-height:80px;box-sizing:border-box;resize:none;padding:var(--space-3);"
-        >${tempProduct.description}</textarea>
-      </div>
-
-      <!-- Category chips -->
-      <div style="margin-bottom:var(--space-6);">
-        <label class="input-label" style="margin-bottom:var(--space-3);">Category</label>
-        <div id="category-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);">
-          ${demoCategories.map(cat => `
-            <div 
-              class="chip ${selectedCategory === cat.id ? 'chip--active' : ''}" 
-              data-category="${cat.id}"
-              role="radio"
-              tabindex="0"
-              aria-checked="${selectedCategory === cat.id}"
-              aria-label="${cat.name}"
-            >
-              <span class="chip__icon">${cat.icon}</span>
-              <span>${cat.name}</span>
-            </div>
-          `).join('')}
+        <!-- Price -->
+        <div class="input-group">
+          <div class="input-with-prefix" style="min-height:52px;">
+            <span class="input-prefix" style="min-height:52px;">₹</span>
+            <input 
+              type="tel"
+              inputmode="numeric"
+              id="product-price"
+              class="input"
+              placeholder="Price"
+              maxlength="6"
+              value="${tempProduct.price}"
+              aria-label="Product price in rupees"
+              style="min-height:52px;border:none;box-sizing:border-box;"
+            />
+          </div>
         </div>
-      </div>
 
-      <!-- List button -->
-      <button id="list-btn" class="btn btn-primary" style="text-transform:uppercase;font-size:var(--text-base);letter-spacing:0.5px;">
-        👁️ PREVIEW PRODUCT
-      </button>
+        <!-- Description -->
+        <div class="input-group">
+          <textarea 
+            id="product-description"
+            class="input"
+            placeholder="Describe your creation... (e.g. size, material, care instructions)"
+            maxlength="500"
+            rows="3"
+            aria-label="Product description"
+            style="min-height:80px;box-sizing:border-box;resize:none;padding:var(--space-3);"
+          >${tempProduct.description}</textarea>
+        </div>
+
+        <!-- Category chips -->
+        <div style="margin-bottom:var(--space-6);">
+          <label class="input-label" style="margin-bottom:var(--space-3);">Category</label>
+          <div id="category-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);">
+            ${demoCategories.map(cat => `
+              <div 
+                class="chip ${selectedCategory === cat.id ? 'chip--active' : ''}" 
+                data-category="${cat.id}"
+                role="radio"
+                tabindex="0"
+                aria-checked="${selectedCategory === cat.id}"
+                aria-label="${cat.name}"
+              >
+                <span class="chip__icon">${cat.icon}</span>
+                <span>${cat.name}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- List button -->
+        <button id="list-btn" class="btn btn-primary" style="text-transform:uppercase;font-size:var(--text-base);letter-spacing:0.5px;">
+          👁️ PREVIEW PRODUCT
+        </button>
+      </div>
 
     </section>
   `;
@@ -149,8 +153,10 @@ function renderPreview() {
   }).format(parseFloat(tempProduct.price));
 
   return `
+    ${renderNavbar('dashboard')}
+
     <!-- Fixed Header -->
-    <header class="header">
+    <header class="header mobile-header">
       <button class="header__action" id="preview-back-btn" aria-label="Go back" style="background:none;border:none;cursor:pointer;font-size:1.3rem;">
         ←
       </button>
@@ -170,14 +176,17 @@ function renderPreview() {
         margin-bottom: var(--space-5);
         text-align: center;
         border: 1px solid var(--color-primary);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
       ">
         👁️ This is a preview of how buyers will see your product!
       </div>
 
-      <!-- Instagram/Consumer Style Preview Card -->
-      <div class="card" style="margin-bottom: var(--space-6); overflow: hidden; padding: 0; box-shadow: var(--shadow-md); background: var(--color-surface); border-radius: var(--radius-md);">
+      <!-- Instagram/Consumer Style Preview Card (Using detail page classes for split view) -->
+      <div class="product-detail-container" style="background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: var(--space-4) !important;">
         <!-- Product Image Area -->
-        <div style="
+        <div class="product-detail-image-wrapper" style="
           width: 100%;
           aspect-ratio: 4/5;
           background: ${imagePreviewUrl ? `url(${imagePreviewUrl}) center/cover no-repeat` : `linear-gradient(135deg, ${getRandomColor()}20, ${getRandomColor()}40)`};
@@ -186,12 +195,14 @@ function renderPreview() {
           justify-content: center;
           font-size: 8rem;
           position: relative;
+          border-radius: var(--radius-md);
+          overflow: hidden;
         ">
           ${imagePreviewUrl ? '' : categoryIcon}
         </div>
 
         <!-- Product Details -->
-        <div style="padding: var(--space-5) var(--space-4);">
+        <div class="product-detail-info-wrapper" style="padding: var(--space-2) var(--space-4);">
           <h2 style="font-size: var(--text-xl); font-weight: var(--font-bold); color: var(--color-on-surface); margin-top: 0; margin-bottom: var(--space-2); line-height: 1.3;">
             ${tempProduct.name}
           </h2>
@@ -205,21 +216,21 @@ function renderPreview() {
             </span>
           </div>
 
-          <div style="border-top: 1px solid var(--color-border); padding-top: var(--space-4);">
+          <div style="border-top: 1px solid var(--color-border); padding-top: var(--space-4); margin-bottom: var(--space-6);">
             <h4 style="font-size: var(--text-sm); font-weight: var(--font-bold); color: var(--color-on-surface-medium); text-transform: uppercase; margin-top: 0; margin-bottom: var(--space-2); letter-spacing: 0.5px;">Description</h4>
             <p style="font-size: var(--text-base); color: var(--color-on-surface-medium); line-height: 1.6; margin: 0; white-space: pre-wrap;">${tempProduct.description || 'No description provided.'}</p>
           </div>
-        </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div style="display: flex; flex-direction: column; gap: var(--space-3);">
-        <button id="publish-btn" class="btn btn-primary" style="text-transform:uppercase;font-size:var(--text-base);letter-spacing:0.5px;min-height:56px;">
-          🚀 PUBLISH PRODUCT
-        </button>
-        <button id="edit-btn" class="btn btn-secondary" style="min-height:52px;">
-          ✏️ Edit Details
-        </button>
+          <!-- Action Buttons -->
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+            <button id="publish-btn" class="btn btn-primary" style="text-transform:uppercase;font-size:var(--text-base);letter-spacing:0.5px;min-height:56px;">
+              🚀 PUBLISH PRODUCT
+            </button>
+            <button id="edit-btn" class="btn btn-secondary" style="min-height:52px;">
+              ✏️ Edit Details
+            </button>
+          </div>
+        </div>
       </div>
 
     </section>
@@ -230,16 +241,18 @@ function renderSuccess() {
   const artisan = getCurrentArtisan() || { uid: 'artisan-1' };
   
   return `
+    ${renderNavbar('dashboard')}
+
     <!-- Fixed Header -->
-    <header class="header">
+    <header class="header mobile-header">
       <div class="header__title" style="justify-content:center;">
         <span>🧶</span>
         <span>Knoticeable</span>
       </div>
     </header>
 
-    <section class="page page--no-nav" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-      <div style="width:100%;max-width:360px;text-align:center;">
+    <section class="page page--no-nav" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-6);">
+      <div class="add-product-form-container" style="width:100%;max-width:360px;text-align:center;">
         
         <!-- Success emoji -->
         <div style="font-size:5rem;margin-bottom:var(--space-6);line-height:1;">🎉</div>
