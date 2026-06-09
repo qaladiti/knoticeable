@@ -506,6 +506,54 @@
                 top: 84px !important;
             }
         }
+
+        /* MULTI-COLUMN FOOTER */
+        footer {
+            background-color: var(--wool-charcoal);
+            color: var(--soft-oatmeal);
+            padding: 50px 0 25px 0;
+            margin-top: 80px;
+        }
+        .footer-cols {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1400px;
+        }
+        @media (min-width: 768px) {
+            .footer-cols {
+                grid-template-columns: 2fr 1fr 1fr;
+                gap: 40px;
+            }
+        }
+        .footer-col h3 {
+            color: white;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+            font-family: 'Comfortaa', sans-serif;
+            font-weight: 700;
+        }
+        .footer-col p {
+            line-height: 1.6;
+            color: #A0A5C1;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid #3F4257;
+            color: #7A7E9A;
+            font-size: 0.8rem;
+            width: 90%;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
     </style>
 </head>
 <body>
@@ -706,6 +754,27 @@
             </div>
         </div>
     </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-cols">
+            <div class="footer-col">
+                <h3 class="wool-font">Knoticeable</h3>
+                <p>An ecosystem dedicated to empowering independent women crochet crafters and micro-entrepreneurs. Bringing ancient slow-fashion techniques to modern global doorsteps.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Discover</h3>
+                <p>Our Artisans<br />Bestselling Collections<br />Custom Order Request<br />Sustainability Report</p>
+            </div>
+            <div class="footer-col">
+                <h3>Support</h3>
+                <p>Fulfillment & Shipping<br />Artisan Fair-Pay Policy<br />Return & Refund Protocol<br />Contact Corporate Trust</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Knoticeable Inc. Hand-stitched with love. All rights reserved.
+        </div>
+    </footer>
 
     <!-- EDIT BIO MODAL -->
     <div class="admin-modal" id="admin-bio-modal">
