@@ -306,15 +306,11 @@
     </div>
 
     <!-- DYNAMIC DATA INJECTION HOOKS -->
-    <script>
-        /**
-         * Knoticeable Storefront Integration Script
-         * 
-         * This script defines the placeholder hooks where 'products.js' 
-         * and the demo data/API layer will dynamically inject data.
-         */
+    <script type="module">
+        import { getArtisanById, getProductsByArtisan } from '/src/utils/demo-data.js';
+
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🧶 Knoticeable Storefront page loaded. Awaiting dynamic data...');
+            console.log('🧶 Knoticeable Storefront page loaded. Loading dynamic data...');
 
             // Hook references
             const artisanNameEl = document.getElementById('shop-artisan-name');
@@ -330,7 +326,9 @@
             window.injectArtisanProfile = function(artisan) {
                 if (!artisan) return;
                 if (artisanNameEl) artisanNameEl.textContent = artisan.shopName || artisan.name;
-                if (artisanLocationEl) artisanLocationEl.textContent = `📍 ${artisan.location || 'India Cluster'}`;
+                if (artisanLocationEl) {
+                    artisanLocationEl.textContent = `📍 ${artisan.location || 'India Cluster'}`;
+                }
                 if (artisanStoryEl) artisanStoryEl.textContent = artisan.bio || artisan.story || '';
             };
 
@@ -363,27 +361,53 @@
                 products.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'shop-item-card';
+                    
+                    // Emoji placeholder color matching standard product rendering style
+                    const pEmoji = product.emoji || '🧶';
+                    const pColor = product.color || '#DEB887';
+                    const pImageStyle = product.imageUrl ? 
+                        `background-image: url('${product.imageUrl}');` : 
+                        `background: linear-gradient(135deg, ${pColor}20, ${pColor}40); display: flex; align-items: center; justify-content: center; font-size: 5rem;`;
+
                     card.innerHTML = `
                         <div class="wishlist-heart" onclick="toggleWishlist('${product.id}')">♡</div>
-                        <div class="item-img" style="background-image: url('${product.imageUrl || 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=500&q=80'}');"></div>
+                        <div class="item-img" style="${pImageStyle}">
+                            ${product.imageUrl ? '' : pEmoji}
+                        </div>
                         <div class="item-details">
                             <h3>${product.title || product.name}</h3>
                             <span class="item-price">₹${(product.price / 100).toLocaleString('en-IN')}</span>
-                            <a href="#" class="cart-btn" onclick="addToCart('${product.id}')">Add to Cart</a>
+                            <a href="/#/product/${product.id}" class="cart-btn">View Details</a>
                         </div>
                     `;
                     productsGridEl.appendChild(card);
                 });
             };
 
+            // Parse URL parameters and fetch/inject data
+            const params = new URLSearchParams(window.location.search);
+            const artisanId = params.get('id') || 'artisan-1';
+
+            const artisan = getArtisanById(artisanId);
+            const products = getProductsByArtisan(artisanId);
+
+            if (artisan) {
+                // Mock location/cluster details if not populated in the object
+                const clusters = {
+                    'artisan-1': "Jaipur, Rajasthan Cluster",
+                    'artisan-2': 'Palakkad, Kerala Cluster',
+                    'artisan-3': "Lucknow, Uttar Pradesh Cluster",
+                    'artisan-4': 'Ludhiana, Punjab Cluster',
+                };
+                artisan.location = clusters[artisanId] || "India Craft Cluster";
+                
+                window.injectArtisanProfile(artisan);
+            }
+            window.injectProductsCatalog(products);
+
             // Global mock event handlers
             window.toggleWishlist = function(productId) {
                 console.log(`Wishlist toggled for product: ${productId}`);
-            };
-
-            window.addToCart = function(productId) {
-                console.log(`Add to cart triggered for product: ${productId}`);
-                // In future: window.parent.postMessage({ type: 'ADD_TO_CART', id: productId }, '*');
             };
         });
     </script>

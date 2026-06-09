@@ -296,7 +296,7 @@ export function init() {
   document.querySelectorAll('.shop-link-btn[data-artisan-id]').forEach(btn => {
     btn.addEventListener('click', () => {
       const artisanId = btn.dataset.artisanId;
-      navigate('/shop', { id: artisanId });
+      window.location.href = `/artisan-shop.html?id=${artisanId}`;
     });
   });
 
