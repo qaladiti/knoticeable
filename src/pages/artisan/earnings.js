@@ -10,6 +10,7 @@ import { renderNavbar } from '../../components/navbar.js';
 
 export function render() {
   const artisan = getCurrentArtisan() || {
+    uid: 'artisan-1',
     shopName: "Priya's Crochet Studio",
     upiId: 'priya@upi',
   };
@@ -141,7 +142,7 @@ export function render() {
         <span class="fab__label">Add</span>
       </div>
       
-      <a class="bottom-nav__item" href="#/shop" aria-label="Shop Profile">
+      <a class="bottom-nav__item" href="/artisan-shop.html?id=${artisan.uid}" aria-label="Shop Profile">
         <span class="bottom-nav__icon">🏪</span>
         <span>My Shop</span>
       </a>

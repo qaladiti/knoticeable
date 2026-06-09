@@ -121,7 +121,7 @@ export function render() {
         <span class="fab__label">Add</span>
       </div>
       
-      <a class="bottom-nav__item" href="#/shop" aria-label="Shop Profile">
+      <a class="bottom-nav__item" href="/artisan-shop.html?id=${artisan.uid}" aria-label="Shop Profile">
         <span class="bottom-nav__icon">🏪</span>
         <span>My Shop</span>
       </a>
@@ -139,12 +139,19 @@ export function init() {
     });
   }
 
-  // Quick action: My Products (navigates to their Instagram-style shop page)
+  // Quick action: My Products (navigates to their public storefront page)
   const myProductsBtn = document.getElementById('action-my-products');
   if (myProductsBtn) {
-    myProductsBtn.addEventListener('click', () => navigate('/shop'));
+    myProductsBtn.addEventListener('click', () => {
+      const artisan = getCurrentArtisan() || { uid: 'artisan-1' };
+      window.location.href = `/artisan-shop.html?id=${artisan.uid}`;
+    });
     myProductsBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/shop'); }
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const artisan = getCurrentArtisan() || { uid: 'artisan-1' };
+        window.location.href = `/artisan-shop.html?id=${artisan.uid}`;
+      }
     });
   }
 

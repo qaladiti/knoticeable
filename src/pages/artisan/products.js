@@ -4,7 +4,7 @@
  */
 
 import { navigate } from '../../router.js';
-import { demoProducts } from '../../utils/demo-data.js';
+import { demoProducts, updateProductAvailability } from '../../utils/demo-data.js';
 import { formatRupees } from '../../utils/format.js';
 import { showToast } from '../../components/toast.js';
 import { renderNavbar } from '../../components/navbar.js';
@@ -109,6 +109,8 @@ export function init() {
       const productId = e.target.dataset.productId;
       const isAvailable = e.target.checked;
       availabilityState[productId] = isAvailable;
+      
+      updateProductAvailability(productId, isAvailable);
 
       if (isAvailable) {
         showToast('Product is now visible to buyers', 'success');

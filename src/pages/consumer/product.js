@@ -180,11 +180,11 @@ export function init() {
     });
   }
 
-  // Shop name link (navigates directly to the Instagram-style shop profile)
+  // Shop name link (navigates directly to the custom storefront page)
   const shopLink = document.getElementById('shop-link');
   if (shopLink) {
     shopLink.addEventListener('click', () => {
-      navigate('/shop', { id: product.artisanId });
+      window.location.href = `/artisan-shop.html?id=${product.artisanId}`;
     });
   }
 }

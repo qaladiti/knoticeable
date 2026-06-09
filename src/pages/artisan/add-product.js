@@ -488,7 +488,7 @@ function initSuccess() {
     viewShopBtn.addEventListener('click', () => {
       const artisanId = viewShopBtn.dataset.artisanId;
       resetState();
-      navigate('/shop', { id: artisanId });
+      window.location.href = `/artisan-shop.html?id=${artisanId}`;
     });
   }
 

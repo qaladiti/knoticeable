@@ -168,9 +168,138 @@
             color: var(--wool-charcoal); font-weight: 600; transition: all 0.2s; background: white;
         }
         .page-node.active, .page-node:hover { background: var(--artisan-olive); color: white; border-color: var(--artisan-olive); }
+
+        /* OWNER ADMIN BANNER & MODAL */
+        .owner-admin-bar {
+            background-color: var(--wool-charcoal);
+            color: white;
+            padding: 12px 24px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            font-size: 0.9rem;
+        }
+        .owner-admin-bar__logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+        .owner-admin-bar__actions {
+            display: flex;
+            gap: 12px;
+        }
+        .admin-btn {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'Comfortaa', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .admin-btn:hover {
+            background-color: rgba(255,255,255,0.25);
+        }
+        .admin-btn--primary {
+            background-color: var(--artisan-olive);
+        }
+        .admin-btn--primary:hover {
+            background-color: #4f5b33;
+        }
+        
+        .admin-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .admin-modal__content {
+            background: white;
+            border-radius: 28px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-light);
+        }
+        .admin-modal__title {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        .admin-modal__textarea {
+            width: 100%;
+            height: 120px;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            padding: 15px;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 0.95rem;
+            resize: none;
+            margin-bottom: 20px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .admin-modal__textarea:focus {
+            border-color: var(--artisan-olive);
+        }
+        .admin-modal__actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .owner-admin-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px 16px;
+                text-align: center;
+            }
+            .owner-admin-bar__actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .mobile-hide {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- OWNER ADMIN BANNER -->
+    <div class="owner-admin-bar" id="owner-admin-bar">
+        <div class="owner-admin-bar__logo">
+            <span>🧶</span>
+            <span>Shop Owner Mode</span>
+        </div>
+        <div style="font-size: 0.85rem; opacity: 0.8; font-weight: 500;" class="mobile-hide">
+            👁️ You are viewing your public storefront.
+        </div>
+        <div class="owner-admin-bar__actions">
+            <button class="admin-btn" id="admin-edit-bio-btn">✏️ Edit Bio</button>
+            <a href="/#/artisan/add-product" class="admin-btn admin-btn--primary">➕ Add Product</a>
+            <a href="/#/artisan/dashboard" class="admin-btn">🏠 Seller Dashboard</a>
+        </div>
+    </div>
 
     <div class="container">
         <!-- ARTISAN BIOGRAPHY HEADER -->
@@ -305,9 +434,21 @@
         </div>
     </div>
 
+    <!-- EDIT BIO MODAL -->
+    <div class="admin-modal" id="admin-bio-modal">
+        <div class="admin-modal__content">
+            <h3 class="admin-modal__title">✏️ Edit Shop Bio</h3>
+            <textarea class="admin-modal__textarea" id="admin-bio-textarea" placeholder="Describe your crochet business..."></textarea>
+            <div class="admin-modal__actions">
+                <button class="admin-btn" id="admin-bio-cancel-btn" style="color: var(--wool-charcoal);">Cancel</button>
+                <button class="admin-btn admin-btn--primary" id="admin-bio-save-btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- DYNAMIC DATA INJECTION HOOKS -->
     <script type="module">
-        import { getArtisanById, getProductsByArtisan } from '/src/utils/demo-data.js';
+        import { getArtisanById, getProductsByArtisan, getCurrentArtisan, updateArtisan } from '/src/utils/demo-data.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🧶 Knoticeable Storefront page loaded. Loading dynamic data...');
@@ -319,60 +460,72 @@
             const productsGridEl = document.getElementById('catalog-products-grid');
             const productsCountEl = document.getElementById('catalog-count-label');
 
+            // Parse URL parameters and fetch/inject data
+            const params = new URLSearchParams(window.location.search);
+            const artisanId = params.get('id') || 'artisan-1';
+
+            const artisan = getArtisanById(artisanId);
+            const products = getProductsByArtisan(artisanId);
+
             /**
              * Hook to populate the artisan profile header details
-             * @param {Object} artisan - The artisan details object
+             * @param {Object} artisanObj - The artisan details object
              */
-            window.injectArtisanProfile = function(artisan) {
-                if (!artisan) return;
-                if (artisanNameEl) artisanNameEl.textContent = artisan.shopName || artisan.name;
+            window.injectArtisanProfile = function(artisanObj) {
+                if (!artisanObj) return;
+                if (artisanNameEl) artisanNameEl.textContent = artisanObj.shopName || artisanObj.name;
                 if (artisanLocationEl) {
-                    artisanLocationEl.textContent = `📍 ${artisan.location || 'India Cluster'}`;
+                    artisanLocationEl.textContent = `📍 ${artisanObj.location || 'India Cluster'}`;
                 }
-                if (artisanStoryEl) artisanStoryEl.textContent = artisan.bio || artisan.story || '';
+                if (artisanStoryEl) artisanStoryEl.textContent = artisanObj.bio || artisanObj.story || '';
             };
 
             /**
              * Hook to render products inside the catalog shop grid
-             * @param {Array<Object>} products - List of products to render
+             * @param {Array<Object>} productsList - List of products to render
              */
-            window.injectProductsCatalog = function(products = []) {
+            window.injectProductsCatalog = function(productsList = []) {
                 if (!productsGridEl) return;
                 
                 // Clear the static placeholder grid items
                 productsGridEl.innerHTML = '';
                 
                 if (productsCountEl) {
-                    productsCountEl.textContent = `Showing ${products.length} Creation${products.length !== 1 ? 's' : ''}`;
+                    productsCountEl.textContent = `Showing ${productsList.length} Creation${productsList.length !== 1 ? 's' : ''}`;
                 }
 
-                if (products.length === 0) {
+                if (productsList.length === 0) {
                     productsGridEl.innerHTML = `
                         <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--cozy-taupe);">
                             <div style="font-size: 3rem; margin-bottom: 15px;">🧶</div>
-                            <h3>No creations match your filters.</h3>
-                            <p>Try broadening your selections on the sidebar.</p>
+                            <h3>No creations listed yet.</h3>
+                            <p>Once products are published, they will show up here!</p>
                         </div>
                     `;
                     return;
                 }
 
                 // Render each product card dynamically
-                products.forEach(product => {
+                productsList.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'shop-item-card';
                     
                     // Emoji placeholder color matching standard product rendering style
                     const pEmoji = product.emoji || '🧶';
                     const pColor = product.color || '#DEB887';
-                    const pImageStyle = product.imageUrl ? 
-                        `background-image: url('${product.imageUrl}');` : 
-                        `background: linear-gradient(135deg, ${pColor}20, ${pColor}40); display: flex; align-items: center; justify-content: center; font-size: 5rem;`;
+                    
+                    // Handle image previews
+                    let pImageStyle = `background: linear-gradient(135deg, ${pColor}20, ${pColor}40); display: flex; align-items: center; justify-content: center; font-size: 5rem;`;
+                    if (product.images && product.images.length > 0) {
+                        pImageStyle = `background-image: url('${product.images[0]}');`;
+                    } else if (product.imageUrl) {
+                        pImageStyle = `background-image: url('${product.imageUrl}');`;
+                    }
 
                     card.innerHTML = `
                         <div class="wishlist-heart" onclick="toggleWishlist('${product.id}')">♡</div>
                         <div class="item-img" style="${pImageStyle}">
-                            ${product.imageUrl ? '' : pEmoji}
+                            ${(product.images && product.images.length > 0) || product.imageUrl ? '' : pEmoji}
                         </div>
                         <div class="item-details">
                             <h3>${product.title || product.name}</h3>
@@ -383,13 +536,6 @@
                     productsGridEl.appendChild(card);
                 });
             };
-
-            // Parse URL parameters and fetch/inject data
-            const params = new URLSearchParams(window.location.search);
-            const artisanId = params.get('id') || 'artisan-1';
-
-            const artisan = getArtisanById(artisanId);
-            const products = getProductsByArtisan(artisanId);
 
             if (artisan) {
                 // Mock location/cluster details if not populated in the object
@@ -404,6 +550,59 @@
                 window.injectArtisanProfile(artisan);
             }
             window.injectProductsCatalog(products);
+
+            // Owner admin panel logic
+            const currentArtisan = getCurrentArtisan();
+            const isOwner = currentArtisan && currentArtisan.uid === artisanId;
+
+            if (isOwner) {
+                const adminBar = document.getElementById('owner-admin-bar');
+                if (adminBar) adminBar.style.display = 'flex';
+
+                // Setup edit bio modal logic
+                const editBioBtn = document.getElementById('admin-edit-bio-btn');
+                const bioModal = document.getElementById('admin-bio-modal');
+                const bioCancelBtn = document.getElementById('admin-bio-cancel-btn');
+                const bioSaveBtn = document.getElementById('admin-bio-save-btn');
+                const bioTextarea = document.getElementById('admin-bio-textarea');
+
+                if (editBioBtn && bioModal && bioTextarea) {
+                    editBioBtn.addEventListener('click', () => {
+                        bioTextarea.value = artisan.bio || artisan.story || '';
+                        bioModal.style.display = 'flex';
+                        bioTextarea.focus();
+                    });
+                }
+
+                if (bioCancelBtn && bioModal) {
+                    bioCancelBtn.addEventListener('click', () => {
+                        bioModal.style.display = 'none';
+                    });
+                }
+
+                if (bioSaveBtn && bioModal && bioTextarea) {
+                    bioSaveBtn.addEventListener('click', () => {
+                        const newBio = bioTextarea.value.trim();
+                        updateArtisan(artisanId, { bio: newBio });
+                        
+                        // Update on screen instantly
+                        if (artisanStoryEl) artisanStoryEl.textContent = newBio;
+                        artisan.bio = newBio;
+                        artisan.story = newBio;
+                        
+                        bioModal.style.display = 'none';
+                    });
+                }
+
+                // Close modal on outside click
+                if (bioModal) {
+                    bioModal.addEventListener('click', (e) => {
+                        if (e.target === bioModal) {
+                            bioModal.style.display = 'none';
+                        }
+                    });
+                }
+            }
 
             // Global mock event handlers
             window.toggleWishlist = function(productId) {

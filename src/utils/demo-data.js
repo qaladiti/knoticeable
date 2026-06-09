@@ -3,7 +3,7 @@
  * Used when Firebase is not configured (demo mode)
  */
 
-export const demoArtisans = [
+const initialArtisans = [
   {
     uid: 'artisan-1',
     phone: '+919876543210',
@@ -46,7 +46,7 @@ export const demoArtisans = [
   },
 ];
 
-export const demoProducts = [
+const initialProducts = [
   {
     id: 'prod-1',
     artisanId: 'artisan-1',
@@ -253,6 +253,32 @@ export const demoProducts = [
   },
 ];
 
+export const demoArtisans = (() => {
+  const stored = localStorage.getItem('crochet_artisans');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      return parsed.map(a => ({ ...a, createdAt: new Date(a.createdAt) }));
+    } catch (e) {
+      console.error('Failed to parse stored artisans', e);
+    }
+  }
+  return initialArtisans;
+})();
+
+export const demoProducts = (() => {
+  const stored = localStorage.getItem('crochet_products');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      return parsed.map(p => ({ ...p, createdAt: new Date(p.createdAt) }));
+    } catch (e) {
+      console.error('Failed to parse stored products', e);
+    }
+  }
+  return initialProducts;
+})();
+
 export const demoCategories = [
   { id: 'flowers', name: 'Flowers', icon: '🌸', productCount: 12 },
   { id: 'amigurumi', name: 'Amigurumi', icon: '🧸', productCount: 24 },
@@ -409,6 +435,7 @@ export function searchProducts(query) {
  */
 export function addProduct(product) {
   demoProducts.unshift(product);
+  localStorage.setItem('crochet_products', JSON.stringify(demoProducts));
   return demoProducts;
 }
 
@@ -433,12 +460,26 @@ export function updateArtisan(artisanId, updatedData) {
   const index = demoArtisans.findIndex(a => a.uid === artisanId);
   if (index !== -1) {
     demoArtisans[index] = { ...demoArtisans[index], ...updatedData };
+    localStorage.setItem('crochet_artisans', JSON.stringify(demoArtisans));
     // If updating the current artisan session, update localStorage
     const current = getCurrentArtisan();
     if (current && current.uid === artisanId) {
       setCurrentArtisan(demoArtisans[index]);
     }
     return demoArtisans[index];
+  }
+  return null;
+}
+
+/**
+ * Update product availability toggle
+ */
+export function updateProductAvailability(productId, isAvailable) {
+  const index = demoProducts.findIndex(p => p.id === productId);
+  if (index !== -1) {
+    demoProducts[index].isAvailable = isAvailable;
+    localStorage.setItem('crochet_products', JSON.stringify(demoProducts));
+    return demoProducts[index];
   }
   return null;
 }
