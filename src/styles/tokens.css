@@ -5,40 +5,41 @@
 
 :root {
   /* === COLORS === */
-  --color-primary: #075E54;
-  --color-primary-hover: #064E46;
-  --color-primary-light: #E0F2EF;
-  --color-accent: #25D366;
-  --color-accent-hover: #1DA851;
-  --color-secondary: #C62828;
-  --color-secondary-light: #FFEBEE;
+  --color-primary: #606C38; /* artisan-olive */
+  --color-primary-hover: #4e582e;
+  --color-primary-light: #F4EFE6; /* soft-oatmeal */
+  --color-accent: #606C38;
+  --color-accent-hover: #4e582e;
+  --color-secondary: #8C7A6B; /* cozy-taupe */
+  --color-secondary-light: #F4EFE6;
 
   --color-surface: #FFFFFF;
-  --color-surface-dim: #F8F9FA;
-  --color-surface-variant: #F0F2F5;
+  --color-surface-dim: #FDFBF7; /* felted-cream */
+  --color-surface-variant: #F4EFE6; /* soft-oatmeal */
   --color-surface-elevated: #FFFFFF;
 
-  --color-on-surface: #1A1A2E;
-  --color-on-surface-medium: #4A4A5A;
-  --color-on-surface-muted: #6B7280;
+  --color-on-surface: #2B2D42; /* wool-charcoal */
+  --color-on-surface-medium: #8C7A6B; /* cozy-taupe */
+  --color-on-surface-muted: #8C7A6B;
   --color-on-primary: #FFFFFF;
 
   --color-error: #C62828;
   --color-error-light: #FFEBEE;
   --color-warning: #E65100;
   --color-warning-light: #FFF3E0;
-  --color-success: #1B7A3D;
-  --color-success-light: #E8F5E9;
-  --color-info: #0288D1;
-  --color-info-light: #E1F5FE;
+  --color-success: #606C38;
+  --color-success-light: #F4EFE6;
+  --color-info: #8C7A6B;
+  --color-info-light: #F4EFE6;
 
-  --color-border: #D1D5DB;
-  --color-border-strong: #9CA3AF;
-  --color-focus-ring: #1A73E8;
-  --color-overlay: rgba(0, 0, 0, 0.5);
+  --color-border: #8C7A6B; /* cozy-taupe */
+  --color-border-strong: #2B2D42;
+  --color-focus-ring: #606C38;
+  --color-overlay: rgba(43, 45, 70, 0.5);
 
   /* === TYPOGRAPHY === */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: 'Comfortaa', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-title-family: 'Playfair Display', serif;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;

@@ -4,18 +4,526 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="description" content="Knoticeable — Discover unique handmade crochet products from talented artisans across India." />
-  <meta name="theme-color" content="#075E54" />
+  <meta name="theme-color" content="#606C38" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <title>Knoticeable — Handmade Crochet Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
+  <title>Knoticeable | Handcrafted Crochet Marketplace</title>
+  <style>
+    /* Base configuration style injection for Okhai/Felted Wool Theme */
+    :root {
+      --felted-cream: #FDFBF7;
+      --cozy-taupe: #8C7A6B;
+      --soft-oatmeal: #F4EFE6;
+      --artisan-olive: #606C38;
+      --wool-charcoal: #2B2D42;
+    }
+    
+    body {
+      font-family: 'Comfortaa', sans-serif;
+      background-color: var(--felted-cream);
+      color: var(--wool-charcoal);
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1, h2, h3, .wool-font {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+    }
+    
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+
+    /* 1. HORIZONTAL TOP CATEGORY BANNER */
+    .featured-banner {
+      background-color: var(--artisan-olive);
+      color: white;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background-color: var(--soft-oatmeal);
+      border-radius: 24px;
+      padding: 40px;
+      margin: 30px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 10px 30px rgba(140, 122, 107, 0.05);
+      border: 1px solid var(--soft-oatmeal);
+    }
+    
+    @media (min-width: 768px) {
+      .hero {
+        flex-direction: row;
+        padding: 50px;
+        align-items: center;
+      }
+    }
+    
+    .hero-text {
+      flex: 1.2;
+    }
+    
+    .hero-text h1 {
+      font-size: 2.2rem;
+      color: var(--wool-charcoal);
+      margin-top: 0;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+    
+    @media (min-width: 768px) {
+      .hero-text h1 {
+        font-size: 3rem;
+      }
+    }
+    
+    .hero-text p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--cozy-taupe);
+      margin-bottom: 20px;
+    }
+    
+    .hero-img {
+      flex: 0.8;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(140, 122, 107, 0.15);
+    }
+    
+    .cta-btn {
+      display: inline-block;
+      background-color: var(--artisan-olive);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s, background-color 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      background-color: #4e582e;
+    }
+
+    /* 2. BEST SELLERS GRID (4-column layout) */
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin: 50px 0 25px 0;
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '~~~~';
+      display: block;
+      font-size: 0.9rem;
+      color: var(--cozy-taupe);
+      margin-top: 2px;
+      font-family: serif;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    @media (min-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+      }
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(140, 122, 107, 0.05);
+      transition: all 0.3s ease;
+      border: 1px solid var(--soft-oatmeal);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(140, 122, 107, 0.12);
+    }
+    
+    .product-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background-color: var(--soft-oatmeal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      transition: background-color 0.3s;
+    }
+    
+    .product-info {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    
+    .product-info h3 {
+      margin: 0 0 5px 0;
+      font-size: 1.05rem;
+      color: var(--wool-charcoal);
+      line-height: 1.3;
+    }
+    
+    .artisan-tag {
+      font-size: 0.75rem;
+      color: var(--cozy-taupe);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+    
+    .price {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--artisan-olive);
+    }
+
+    /* 3. CATEGORIES BLOCK (3-column layout) */
+    .category-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-bottom: 50px;
+    }
+    
+    @media (min-width: 768px) {
+      .category-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+    
+    .category-card {
+      height: 150px;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--cozy-taupe), var(--wool-charcoal));
+      cursor: pointer;
+    }
+    
+    .category-card h3 {
+      color: white;
+      position: relative;
+      z-index: 2;
+      font-size: 1.5rem;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* 4. MEET OUR ARTISANS VIDEO SCROLL CAROUSEL */
+    .video-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 15px 0;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .video-card {
+      flex: 0 0 280px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(140, 122, 107, 0.05);
+      border: 1px solid var(--soft-oatmeal);
+    }
+    
+    .video-placeholder {
+      width: 100%;
+      height: 350px;
+      background: linear-gradient(180deg, #3a3b4c, #1f202e);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .play-btn {
+      width: 54px;
+      height: 54px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      font-size: 1.1rem;
+      transition: transform 0.2s;
+    }
+    
+    .play-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .artisan-profile-summary {
+      padding: 15px;
+      text-align: center;
+    }
+    
+    .artisan-profile-summary h4 {
+      margin: 0 0 4px 0;
+      font-size: 1.1rem;
+      color: var(--wool-charcoal);
+    }
+    
+    .shop-link-btn {
+      display: block;
+      margin-top: 10px;
+      border: 1px solid var(--cozy-taupe);
+      color: var(--cozy-taupe);
+      padding: 8px 0;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    
+    .shop-link-btn:hover {
+      background: var(--cozy-taupe);
+      color: white;
+    }
+
+    /* 5. MULTI-COLUMN FOOTER */
+    footer {
+      background-color: var(--wool-charcoal);
+      color: var(--soft-oatmeal);
+      padding: 50px 0 25px 0;
+      margin-top: 60px;
+    }
+    
+    .footer-cols {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    @media (min-width: 768px) {
+      .footer-cols {
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 40px;
+      }
+    }
+    
+    .footer-col h3 {
+      color: white;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.25rem;
+    }
+    
+    .footer-col p {
+      line-height: 1.6;
+      color: #A0A5C1;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 25px;
+      border-top: 1px solid #3F4257;
+      color: #7A7E9A;
+      font-size: 0.8rem;
+    }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
+  
+  <!-- Mount point for the SPA -->
+  <div id="app">
+    <!-- Static Landing Fallback (matches Home view rendering style for fast paint) -->
+    <div class="featured-banner">
+      ✨ FEATURED CATEGORY: <span class="wool-font" style="font-style: italic;">Crochet Bags</span> - 15% Off with code WOOL15 👜
+    </div>
+
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-text">
+          <h1>Woven Stories, Held by Hand.</h1>
+          <p>Discover our brand new collection of organic cotton crochet bags. Individually stitched over hours of patient labor by artisan women clusters across India.</p>
+          <button class="cta-btn">Explore Tote Bags</button>
+        </div>
+        <div class="hero-img">
+          <div style="background: #D9CFC1; width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; color: #6E5F51; font-size: 1.1rem; text-align: center; padding: 20px; box-sizing: border-box;">
+            [ Feature Image: Cozy Crochet Handbag ]
+          </div>
+        </div>
+      </section>
+
+      <!-- Bestsellers Grid -->
+      <section>
+        <h2 class="section-title">The Bestsellers</h2>
+        <div class="product-grid">
+          <div class="product-card">
+            <div class="product-img" style="background: linear-gradient(135deg, #F4C43020, #F4C43040);">🌻</div>
+            <div class="product-info">
+              <h3>Sunflower Bucket Bag</h3>
+              <div class="artisan-tag">by Radha M., Jaipur Cluster</div>
+              <div class="price-row">
+                <span class="price">₹1,499</span>
+                <button class="cta-btn" style="padding: 6px 12px; font-size: 0.8rem;">View</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-img" style="background: linear-gradient(135deg, #FF6B6B20, #FF6B6B40);">👚</div>
+            <div class="product-info">
+              <h3>Boho Summer Crop Top</h3>
+              <div class="artisan-tag">by Priya S., Kochi Handcrafts</div>
+              <div class="price-row">
+                <span class="price">₹2,199</span>
+                <button class="cta-btn" style="padding: 6px 12px; font-size: 0.8rem;">View</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-img" style="background: linear-gradient(135deg, #E6B0AA20, #E6B0AA40);">🎀</div>
+            <div class="product-info">
+              <h3>Pastel Granny Square Pouch</h3>
+              <div class="artisan-tag">by Fatima B., Lucknow Cluster</div>
+              <div class="price-row">
+                <span class="price">₹650</span>
+                <button class="cta-btn" style="padding: 6px 12px; font-size: 0.8rem;">View</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-img" style="background: linear-gradient(135deg, #DEB88720, #DEB88740);">🏠</div>
+            <div class="product-info">
+              <h3>Vintage Lace Table Runner</h3>
+              <div class="artisan-tag">by Meenakshi, Madurai Collective</div>
+              <div class="price-row">
+                <span class="price">₹1,850</span>
+                <button class="cta-btn" style="padding: 6px 12px; font-size: 0.8rem;">View</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Shop Categories -->
+      <section style="margin-top: 40px;">
+        <h2 class="section-title">Shop Categories</h2>
+        <div class="category-row">
+          <div class="category-card" style="background: linear-gradient(135deg, #8C7A6B, #2B2D42);">
+            <h3>Bags & Totes 👜</h3>
+          </div>
+          <div class="category-card" style="background: linear-gradient(135deg, #606C38, #2B2D42);">
+            <h3>Wearables 👗</h3>
+          </div>
+          <div class="category-card" style="background: linear-gradient(135deg, #8C7A6B, #606C38);">
+            <h3>Home & Decor 🏠</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- Meet Our Artisans Video Scroll -->
+      <section style="margin-bottom: 50px;">
+        <h2 class="section-title">Meet Our Artisans</h2>
+        <div class="video-scroll">
+          <div class="video-card">
+            <div class="video-placeholder">
+              <div class="play-btn">▶</div>
+            </div>
+            <div class="artisan-profile-summary">
+              <h4>Priya S.</h4>
+              <div class="artisan-tag" style="margin:0;">Jaipur Handcrafts</div>
+              <button class="shop-link-btn" style="width: 100%; border: 1px solid var(--cozy-taupe); background: none;">Visit Her Shop</button>
+            </div>
+          </div>
+          <div class="video-card">
+            <div class="video-placeholder">
+              <div class="play-btn">▶</div>
+            </div>
+            <div class="artisan-profile-summary">
+              <h4>Meena Devi</h4>
+              <div class="artisan-tag" style="margin:0;">Palakkad Collective</div>
+              <button class="shop-link-btn" style="width: 100%; border: 1px solid var(--cozy-taupe); background: none;">Visit Her Shop</button>
+            </div>
+          </div>
+          <div class="video-card">
+            <div class="video-placeholder">
+              <div class="play-btn">▶</div>
+            </div>
+            <div class="artisan-profile-summary">
+              <h4>Ritu Raj</h4>
+              <div class="artisan-tag" style="margin:0;">Bastar Craft Cluster</div>
+              <button class="shop-link-btn" style="width: 100%; border: 1px solid var(--cozy-taupe); background: none;">Visit Her Shop</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-cols">
+        <div class="footer-col">
+          <h3 class="wool-font">Knoticeable</h3>
+          <p>An ecosystem dedicated to empowering independent women crochet crafters and micro-entrepreneurs. Bringing ancient slow-fashion techniques to modern global doorsteps.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Discover</h3>
+          <p>Our Artisans<br />Bestselling Collections<br />Custom Order Request<br />Sustainability Report</p>
+        </div>
+        <div class="footer-col">
+          <h3>Support</h3>
+          <p>Fulfillment & Shipping<br />Artisan Fair-Pay Policy<br />Return & Refund Protocol<br />Contact Corporate Trust</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Knoticeable Inc. Hand-stitched with love. All rights reserved.
+      </div>
+    </footer>
+  </div>
+  
   <div id="toast-container" aria-live="polite"></div>
   <script type="module" src="/src/main.js"></script>
 </body>
