@@ -133,9 +133,9 @@ export function render() {
         <span class="fab__label">Add</span>
       </div>
       
-      <a class="bottom-nav__item bottom-nav__item--active" href="#/artisan/earnings" aria-label="Earnings" aria-current="page">
-        <span class="bottom-nav__icon">💰</span>
-        <span>Money</span>
+      <a class="bottom-nav__item" href="#/shop" aria-label="Shop Profile">
+        <span class="bottom-nav__icon">🏪</span>
+        <span>My Shop</span>
       </a>
     </nav>
   `;

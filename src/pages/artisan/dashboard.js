@@ -113,9 +113,9 @@ export function render() {
         <span class="fab__label">Add</span>
       </div>
       
-      <a class="bottom-nav__item" href="#/artisan/earnings" aria-label="Earnings">
-        <span class="bottom-nav__icon">💰</span>
-        <span>Money</span>
+      <a class="bottom-nav__item" href="#/shop" aria-label="Shop Profile">
+        <span class="bottom-nav__icon">🏪</span>
+        <span>My Shop</span>
       </a>
     </nav>
   `;
@@ -131,12 +131,12 @@ export function init() {
     });
   }
 
-  // Quick action: My Products
+  // Quick action: My Products (navigates to their Instagram-style shop page)
   const myProductsBtn = document.getElementById('action-my-products');
   if (myProductsBtn) {
-    myProductsBtn.addEventListener('click', () => navigate('/artisan/products'));
+    myProductsBtn.addEventListener('click', () => navigate('/shop'));
     myProductsBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/artisan/products'); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/shop'); }
     });
   }
 

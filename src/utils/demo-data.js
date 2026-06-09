@@ -403,3 +403,43 @@ export function searchProducts(query) {
     return b.orderCount - a.orderCount;
   });
 }
+
+/**
+ * Add a new product to the local demo database
+ */
+export function addProduct(product) {
+  demoProducts.unshift(product);
+  return demoProducts;
+}
+
+/**
+ * Get all products listed by a specific artisan
+ */
+export function getProductsByArtisan(artisanId) {
+  return demoProducts.filter(p => p.artisanId === artisanId);
+}
+
+/**
+ * Get an artisan by their UID
+ */
+export function getArtisanById(artisanId) {
+  return demoArtisans.find(a => a.uid === artisanId) || null;
+}
+
+/**
+ * Update an artisan's profile details (e.g. bio, name)
+ */
+export function updateArtisan(artisanId, updatedData) {
+  const index = demoArtisans.findIndex(a => a.uid === artisanId);
+  if (index !== -1) {
+    demoArtisans[index] = { ...demoArtisans[index], ...updatedData };
+    // If updating the current artisan session, update localStorage
+    const current = getCurrentArtisan();
+    if (current && current.uid === artisanId) {
+      setCurrentArtisan(demoArtisans[index]);
+    }
+    return demoArtisans[index];
+  }
+  return null;
+}
+

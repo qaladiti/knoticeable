@@ -1,19 +1,33 @@
 /**
  * Add Product — Knoticeable
- * 1-click product uploader for artisans
+ * 1-click product uploader for artisans with intermediate preview state
  */
 
 import { navigate } from '../../router.js';
 import { showToast } from '../../components/toast.js';
-import { demoCategories } from '../../utils/demo-data.js';
+import { demoCategories, addProduct, getCurrentArtisan } from '../../utils/demo-data.js';
 
 let selectedCategory = '';
 let imagePreviewUrl = '';
-let isListed = false;
+let currentView = 'form'; // 'form' | 'preview' | 'success'
+
+let tempProduct = {
+  name: '',
+  price: '',
+  description: '',
+  category: ''
+};
+
+function getRandomColor() {
+  const colors = ['#F4C430', '#C4A882', '#DEB887', '#FF6B6B', '#E6B0AA', '#F5F5DC', '#9B59B6', '#C39BD3', '#2C3E50', '#E74C3C', '#27AE60'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
 
 export function render() {
-  if (isListed) {
+  if (currentView === 'success') {
     return renderSuccess();
+  } else if (currentView === 'preview') {
+    return renderPreview();
   }
   return renderForm();
 }
@@ -57,6 +71,7 @@ function renderForm() {
           class="input"
           placeholder="What did you make?"
           maxlength="100"
+          value="${tempProduct.name}"
           aria-label="Product name"
           style="min-height:52px;box-sizing:border-box;"
         />
@@ -73,10 +88,24 @@ function renderForm() {
             class="input"
             placeholder="Price"
             maxlength="6"
+            value="${tempProduct.price}"
             aria-label="Product price in rupees"
             style="min-height:52px;border:none;box-sizing:border-box;"
           />
         </div>
+      </div>
+
+      <!-- Description -->
+      <div class="input-group">
+        <textarea 
+          id="product-description"
+          class="input"
+          placeholder="Describe your creation... (e.g. size, material, care instructions)"
+          maxlength="500"
+          rows="3"
+          aria-label="Product description"
+          style="min-height:80px;box-sizing:border-box;resize:none;padding:var(--space-3);"
+        >${tempProduct.description}</textarea>
       </div>
 
       <!-- Category chips -->
@@ -101,14 +130,105 @@ function renderForm() {
 
       <!-- List button -->
       <button id="list-btn" class="btn btn-primary" style="text-transform:uppercase;font-size:var(--text-base);letter-spacing:0.5px;">
-        ✅ LIST FOR SALE
+        👁️ PREVIEW PRODUCT
       </button>
 
     </section>
   `;
 }
 
+function renderPreview() {
+  const categoryObj = demoCategories.find(c => c.id === selectedCategory);
+  const categoryName = categoryObj ? categoryObj.name : 'Handmade';
+  const categoryIcon = categoryObj ? categoryObj.icon : '🧶';
+  
+  const formattedPrice = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  }).format(parseFloat(tempProduct.price));
+
+  return `
+    <!-- Fixed Header -->
+    <header class="header">
+      <button class="header__action" id="preview-back-btn" aria-label="Go back" style="background:none;border:none;cursor:pointer;font-size:1.3rem;">
+        ←
+      </button>
+      <div class="header__title">Product Preview</div>
+    </header>
+
+    <section class="page page--no-nav" style="padding-bottom: var(--space-8);">
+      
+      <!-- Warning Info Banner -->
+      <div style="
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
+        font-weight: var(--font-semibold);
+        margin-bottom: var(--space-5);
+        text-align: center;
+        border: 1px solid var(--color-primary);
+      ">
+        👁️ This is a preview of how buyers will see your product!
+      </div>
+
+      <!-- Instagram/Consumer Style Preview Card -->
+      <div class="card" style="margin-bottom: var(--space-6); overflow: hidden; padding: 0; box-shadow: var(--shadow-md); background: var(--color-surface); border-radius: var(--radius-md);">
+        <!-- Product Image Area -->
+        <div style="
+          width: 100%;
+          aspect-ratio: 4/5;
+          background: ${imagePreviewUrl ? `url(${imagePreviewUrl}) center/cover no-repeat` : `linear-gradient(135deg, ${getRandomColor()}20, ${getRandomColor()}40)`};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 8rem;
+          position: relative;
+        ">
+          ${imagePreviewUrl ? '' : categoryIcon}
+        </div>
+
+        <!-- Product Details -->
+        <div style="padding: var(--space-5) var(--space-4);">
+          <h2 style="font-size: var(--text-xl); font-weight: var(--font-bold); color: var(--color-on-surface); margin-top: 0; margin-bottom: var(--space-2); line-height: 1.3;">
+            ${tempProduct.name}
+          </h2>
+          <div style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-primary); margin-bottom: var(--space-4);">
+            ${formattedPrice}
+          </div>
+          
+          <div style="margin-bottom: var(--space-4);">
+            <span class="badge badge--info" style="font-size: var(--text-sm); padding: var(--space-2) var(--space-4);">
+              ${categoryIcon} ${categoryName}
+            </span>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-border); padding-top: var(--space-4);">
+            <h4 style="font-size: var(--text-sm); font-weight: var(--font-bold); color: var(--color-on-surface-medium); text-transform: uppercase; margin-top: 0; margin-bottom: var(--space-2); letter-spacing: 0.5px;">Description</h4>
+            <p style="font-size: var(--text-base); color: var(--color-on-surface-medium); line-height: 1.6; margin: 0; white-space: pre-wrap;">${tempProduct.description || 'No description provided.'}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+        <button id="publish-btn" class="btn btn-primary" style="text-transform:uppercase;font-size:var(--text-base);letter-spacing:0.5px;min-height:56px;">
+          🚀 PUBLISH PRODUCT
+        </button>
+        <button id="edit-btn" class="btn btn-secondary" style="min-height:52px;">
+          ✏️ Edit Details
+        </button>
+      </div>
+
+    </section>
+  `;
+}
+
 function renderSuccess() {
+  const artisan = getCurrentArtisan() || { uid: 'artisan-1' };
+  
   return `
     <!-- Fixed Header -->
     <header class="header">
@@ -141,23 +261,30 @@ function renderSuccess() {
         </div>
         
         <!-- Action buttons -->
-        <button id="add-another-btn" class="btn btn-primary" style="margin-bottom:var(--space-3);">
-          📸 Add Another Product
-        </button>
-        <button id="go-dashboard-btn" class="btn btn-secondary">
-          🏠 Go to Dashboard
-        </button>
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <button id="view-shop-btn" class="btn btn-primary" data-artisan-id="${artisan.uid}">
+            🏪 View in Your Shop
+          </button>
+          <button id="add-another-btn" class="btn btn-secondary" style="background: white; color: var(--color-primary);">
+            📸 Add Another Product
+          </button>
+          <button id="go-dashboard-btn" class="btn btn-ghost">
+            🏠 Go to Dashboard
+          </button>
+        </div>
       </div>
     </section>
   `;
 }
 
 export function init() {
-  if (isListed) {
+  if (currentView === 'success') {
     initSuccess();
-    return;
+  } else if (currentView === 'preview') {
+    initPreview();
+  } else {
+    initForm();
   }
-  initForm();
 }
 
 function initForm() {
@@ -168,10 +295,16 @@ function initForm() {
   const priceInput = document.getElementById('product-price');
   const categoryChips = document.querySelectorAll('#category-grid .chip');
 
-  // Upload zone click → trigger file input
+  // Set values from temp state if pre-populated
+  const nameInput = document.getElementById('product-name');
+  const descInput = document.getElementById('product-description');
+  if (nameInput) nameInput.value = tempProduct.name;
+  if (descInput) descInput.value = tempProduct.description;
+  if (priceInput) priceInput.value = tempProduct.price;
+
+  // Upload zone click
   if (uploadZone && fileInput) {
     uploadZone.addEventListener('click', (e) => {
-      // Don't open file picker if clicking remove button
       if (e.target.id === 'remove-image-btn' || e.target.closest('#remove-image-btn')) return;
       fileInput.click();
     });
@@ -189,7 +322,6 @@ function initForm() {
         const reader = new FileReader();
         reader.onload = (ev) => {
           imagePreviewUrl = ev.target.result;
-          // Re-render just the upload zone
           reRenderPage();
         };
         reader.readAsDataURL(file);
@@ -207,10 +339,25 @@ function initForm() {
     });
   }
 
-  // Price input: only allow numbers
+  // Price input filter
   if (priceInput) {
     priceInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/\D/g, '');
+      tempProduct.price = e.target.value;
+    });
+  }
+
+  // Name input listener to keep state
+  if (nameInput) {
+    nameInput.addEventListener('input', (e) => {
+      tempProduct.name = e.target.value;
+    });
+  }
+
+  // Description input listener to keep state
+  if (descInput) {
+    descInput.addEventListener('input', (e) => {
+      tempProduct.description = e.target.value;
     });
   }
 
@@ -218,7 +365,6 @@ function initForm() {
   categoryChips.forEach(chip => {
     chip.addEventListener('click', () => {
       selectedCategory = chip.dataset.category;
-      // Update active states
       categoryChips.forEach(c => {
         c.classList.remove('chip--active');
         c.setAttribute('aria-checked', 'false');
@@ -235,21 +381,22 @@ function initForm() {
     });
   });
 
-  // List button
+  // Preview List button
   if (listBtn) {
     listBtn.addEventListener('click', () => {
-      const name = document.getElementById('product-name')?.value?.trim();
-      const price = document.getElementById('product-price')?.value?.trim();
+      const name = nameInput?.value?.trim();
+      const price = priceInput?.value?.trim();
+      const desc = descInput?.value?.trim();
 
       if (!name) {
         showToast('Please enter a product name', 'error');
-        document.getElementById('product-name')?.focus();
+        nameInput?.focus();
         return;
       }
 
       if (!price || parseInt(price) <= 0) {
         showToast('Please enter a valid price', 'error');
-        document.getElementById('product-price')?.focus();
+        priceInput?.focus();
         return;
       }
 
@@ -258,17 +405,79 @@ function initForm() {
         return;
       }
 
-      // Demo: show success
-      showToast('Product listed successfully!', 'success');
-      isListed = true;
+      // Save form data to temp product state
+      tempProduct = {
+        name,
+        price,
+        description: desc || '',
+        category: selectedCategory
+      };
+
+      currentView = 'preview';
+      reRenderPage();
+    });
+  }
+}
+
+function initPreview() {
+  const publishBtn = document.getElementById('publish-btn');
+  const editBtn = document.getElementById('edit-btn');
+  const backBtn = document.getElementById('preview-back-btn');
+
+  const goBackToForm = () => {
+    currentView = 'form';
+    reRenderPage();
+  };
+
+  if (editBtn) editBtn.addEventListener('click', goBackToForm);
+  if (backBtn) backBtn.addEventListener('click', goBackToForm);
+
+  if (publishBtn) {
+    publishBtn.addEventListener('click', () => {
+      const artisan = getCurrentArtisan() || { uid: 'artisan-1', shopName: "Priya's Crochet Studio" };
+      const categoryObj = demoCategories.find(c => c.id === selectedCategory);
+
+      // Create new product object
+      const newProduct = {
+        id: 'prod-new-' + Date.now(),
+        artisanId: artisan.uid,
+        shopName: artisan.shopName,
+        title: tempProduct.name,
+        description: tempProduct.description,
+        price: parseFloat(tempProduct.price) * 100, // store in paisa
+        images: imagePreviewUrl ? [imagePreviewUrl] : [],
+        category: categoryObj ? categoryObj.name : 'Crochet',
+        tags: [tempProduct.name.toLowerCase(), selectedCategory],
+        isAvailable: true,
+        viewCount: 0,
+        orderCount: 0,
+        createdAt: new Date(),
+        color: getRandomColor(),
+        emoji: categoryObj ? categoryObj.icon : '🧶'
+      };
+
+      // Add product to data store
+      addProduct(newProduct);
+
+      showToast('Product published successfully!', 'success');
+      currentView = 'success';
       reRenderPage();
     });
   }
 }
 
 function initSuccess() {
+  const viewShopBtn = document.getElementById('view-shop-btn');
   const addAnotherBtn = document.getElementById('add-another-btn');
   const goDashboardBtn = document.getElementById('go-dashboard-btn');
+
+  if (viewShopBtn) {
+    viewShopBtn.addEventListener('click', () => {
+      const artisanId = viewShopBtn.dataset.artisanId;
+      resetState();
+      navigate('/shop', { id: artisanId });
+    });
+  }
 
   if (addAnotherBtn) {
     addAnotherBtn.addEventListener('click', () => {
@@ -288,7 +497,13 @@ function initSuccess() {
 function resetState() {
   selectedCategory = '';
   imagePreviewUrl = '';
-  isListed = false;
+  currentView = 'form';
+  tempProduct = {
+    name: '',
+    price: '',
+    description: '',
+    category: ''
+  };
 }
 
 function reRenderPage() {

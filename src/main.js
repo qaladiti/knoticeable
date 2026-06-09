@@ -44,6 +44,11 @@ route('/profile', async (params) => {
   return mod;
 });
 
+route('/shop', async (params) => {
+  const mod = await import('./pages/consumer/shop.js');
+  return mod;
+});
+
 route('/artisan', async (params) => {
   const mod = await import('./pages/artisan/login.js');
   return mod;
