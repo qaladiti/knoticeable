@@ -281,9 +281,271 @@
                 display: none;
             }
         }
+
+        /* GLOBAL RESPONSIVE NAVBAR */
+        .announcement-banner {
+            background-color: var(--artisan-olive);
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 101;
+            position: relative;
+        }
+        
+        .desktop-header {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--felted-cream);
+            border-bottom: 1.5px solid var(--soft-oatmeal);
+            padding: 20px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-sizing: border-box;
+        }
+        .desktop-header__logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--wool-charcoal);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .desktop-header__links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        .desktop-header__link {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--wool-charcoal);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .desktop-header__link:hover {
+            color: var(--artisan-olive);
+        }
+        .cart-icon-btn {
+            font-size: 1.4rem;
+            text-decoration: none;
+            color: var(--wool-charcoal);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .cart-icon-btn:hover {
+            background: var(--soft-oatmeal);
+        }
+        .cart-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: var(--artisan-olive);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .mobile-nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--felted-cream);
+            border-bottom: 1.5px solid var(--soft-oatmeal);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-sizing: border-box;
+        }
+        .mobile-nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: var(--wool-charcoal);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mobile-nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        .mobile-nav-links a {
+            text-decoration: none;
+            color: var(--wool-charcoal);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .mobile-nav-links a:hover {
+            color: var(--artisan-olive);
+        }
+
+        /* MEET MORE ARTISANS */
+        .more-artisans-section {
+            background-color: var(--soft-oatmeal);
+            padding: 60px 0;
+            margin-top: 80px;
+        }
+        .more-artisans-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .more-artisans-subtitle {
+            text-align: center;
+            color: var(--cozy-taupe);
+            font-size: 1rem;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+        .more-artisans-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        @media (max-width: 992px) {
+            .more-artisans-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .more-artisans-grid {
+                grid-template-columns: 1fr;
+            }
+            .owner-admin-bar {
+                top: 59px !important;
+            }
+        }
+        .artisan-card-mini {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .artisan-card-mini:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .artisan-card-mini__avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--soft-oatmeal), var(--cozy-taupe));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .artisan-card-mini__name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+        .artisan-card-mini__location {
+            color: var(--cozy-taupe);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .artisan-card-mini__bio {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--wool-charcoal);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .artisan-card-mini__btn {
+            background-color: var(--artisan-olive);
+            color: white;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .artisan-card-mini__btn:hover {
+            background-color: #4f5b33;
+        }
+
+        @media (min-width: 768px) {
+            .desktop-header {
+                display: flex;
+            }
+            .mobile-nav-header {
+                display: none;
+            }
+            .owner-admin-bar {
+                top: 84px !important;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Top Announcement Banner -->
+    <div class="announcement-banner">
+        ✨ FEATURED CATEGORY: <span style="font-style: italic; font-family: 'Playfair Display', serif;">Crochet Bags</span> - 15% Off with code WOOL15 👜
+    </div>
+
+    <!-- Desktop Responsive Header -->
+    <header class="desktop-header">
+        <a class="desktop-header__logo" href="/#/">
+            <span>🧶</span>
+            <span>Knoticeable</span>
+        </a>
+        <nav class="desktop-header__links">
+            <a class="desktop-header__link" href="/#/">Home</a>
+            <a class="desktop-header__link" href="/#/search">Search Products</a>
+            <a class="desktop-header__link" href="/#/profile">My Profile</a>
+            <a class="desktop-header__link" href="/#/artisan/dashboard">Seller Dashboard</a>
+        </nav>
+        <div class="desktop-header__actions">
+            <a href="/#/cart" class="cart-icon-btn">
+                🛒 <span class="cart-badge" id="nav-cart-badge" style="display:none;">0</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Mobile Responsive Header -->
+    <header class="mobile-nav-header">
+        <a href="/#/" class="mobile-nav-logo">
+            <span>🧶</span>
+            <span>Knoticeable</span>
+        </a>
+        <div class="mobile-nav-links">
+            <a href="/#/">Home</a>
+            <a href="/#/search">Search</a>
+            <a href="/#/cart">Cart</a>
+        </div>
+    </header>
 
     <!-- OWNER ADMIN BANNER -->
     <div class="owner-admin-bar" id="owner-admin-bar">
@@ -434,6 +696,17 @@
         </div>
     </div>
 
+    <!-- MEET MORE ARTISANS SECTION -->
+    <section class="more-artisans-section">
+        <div class="container" style="padding: 0;">
+            <h2 class="more-artisans-title">Meet More Artisans</h2>
+            <p class="more-artisans-subtitle">Discover unique creations from other craft clusters across India</p>
+            <div class="more-artisans-grid" id="more-artisans-grid">
+                <!-- Dynamically injected other artisans -->
+            </div>
+        </div>
+    </section>
+
     <!-- EDIT BIO MODAL -->
     <div class="admin-modal" id="admin-bio-modal">
         <div class="admin-modal__content">
@@ -448,7 +721,7 @@
 
     <!-- DYNAMIC DATA INJECTION HOOKS -->
     <script type="module">
-        import { getArtisanById, getProductsByArtisan, getCurrentArtisan, updateArtisan } from '/src/utils/demo-data.js';
+        import { getArtisanById, getProductsByArtisan, getCurrentArtisan, updateArtisan, getCartCount, demoArtisans } from '/src/utils/demo-data.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🧶 Knoticeable Storefront page loaded. Loading dynamic data...');
@@ -550,6 +823,48 @@
                 window.injectArtisanProfile(artisan);
             }
             window.injectProductsCatalog(products);
+
+            // Set cart count in header
+            const cartCountEl = document.getElementById('nav-cart-badge');
+            const cartCount = getCartCount();
+            if (cartCountEl && cartCount > 0) {
+                cartCountEl.textContent = cartCount;
+                cartCountEl.style.display = 'flex';
+            }
+
+            // Render other artisans
+            const moreArtisansGridEl = document.getElementById('more-artisans-grid');
+            if (moreArtisansGridEl) {
+                const otherArtisans = demoArtisans.filter(a => a.uid !== artisanId);
+                
+                const clusters = {
+                    'artisan-1': "Jaipur, Rajasthan Cluster",
+                    'artisan-2': 'Palakkad, Kerala Cluster',
+                    'artisan-3': "Lucknow, Uttar Pradesh Cluster",
+                    'artisan-4': 'Ludhiana, Punjab Cluster',
+                };
+                
+                const emojis = {
+                    'artisan-1': '🌸',
+                    'artisan-2': '🌿',
+                    'artisan-3': '🧶',
+                    'artisan-4': '👜',
+                };
+
+                moreArtisansGridEl.innerHTML = otherArtisans.map(other => {
+                    const location = clusters[other.uid] || "India Cluster";
+                    const avatarEmoji = emojis[other.uid] || "👩";
+                    return `
+                        <div class="artisan-card-mini">
+                            <div class="artisan-card-mini__avatar">${avatarEmoji}</div>
+                            <h3 class="artisan-card-mini__name">${other.shopName}</h3>
+                            <div class="artisan-card-mini__location">📍 ${location}</div>
+                            <p class="artisan-card-mini__bio">"${other.bio || 'Meticulously crafted items using generations-old hand crochet and knitting designs.'}"</p>
+                            <a href="/artisan-shop.html?id=${other.uid}" class="artisan-card-mini__btn">Visit Her Shop</a>
+                        </div>
+                    `;
+                }).join('');
+            }
 
             // Owner admin panel logic
             const currentArtisan = getCurrentArtisan();
